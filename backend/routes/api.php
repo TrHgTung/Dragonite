@@ -30,6 +30,7 @@ Route::post('/login', [AuthController::class, 'Login']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     // Interact with Job Data
     Route::get('/mails', [MailController::class, 'GetMails']); // xem cac email da gui thanh cong
+    Route::post('/save', [MailController::class, 'SaveMail']); // luu mail vao danh sach cho
     Route::post('/send', [MailController::class, 'SendMail']); // gui email
     Route::get('/mail/{id}', [MailController::class, 'GetMail']); // xem thong tin cua 1 email by Id
     // User information

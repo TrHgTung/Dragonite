@@ -49,13 +49,14 @@ class AuthController extends Controller
          
         $displayName = $getUserByEmail->display_name;
         $token = $getUserByEmail->createToken('myapptoken')->plainTextToken;
-        $response = [
+        $getSMTP_Password = $getUserByEmail->smtp_password;
+
+        return response()->json([
+            'SMTP_pswrd' => $getSMTP_Password,
             'user' => $getUserByEmail,
             'display_name' => $displayName,
             'token' => $token, // token để authenticate tính năng dưới dạng Bearer Token (Postman)
-        ];
-
-        return response($response, 201);
+        ], 201);
     }
 
     public function LogOut(Request $req){
