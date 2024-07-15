@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import { toast } from 'react-toastify';
 
-const Index = () => {
+const Welcome = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [auth, setAuth] = useState({
@@ -98,4 +98,4 @@ const Index = () => {
   )
 }
 
-export default Index
+export default Welcome
