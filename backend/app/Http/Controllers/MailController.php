@@ -5,19 +5,31 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Mail;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class MailController extends Controller
 {
     public function GetMails(){ // get all sent mails
         // lay tu auth sanctum laravel
-        $userId = (string)auth()->user()->user_id; 
-        $getSMTP_Password = (string)auth()->user()->smtp_password;
+        // try{
+            $userId = (string)auth()->user()->user_id; 
+            $getSMTP_Password = (string)auth()->user()->smtp_password;
 
-        $getMailsByUsrId = Mail::where('user_id', $userId)->where('status', '1')->get();
+            $getMailsByUsrId = Mail::where('user_id', $userId)->where('status', '1')->get();
 
-        return response([
-            'data' => $getJobsByUsrId,
-        ], 200);
+            return response([
+                'data' => $getMailsByUsrId,
+            ], 200);
+        // } 
+        // catch (Exception $e){
+        //     return response([
+        //         'error' => 'Ban chua dang nhap hoac du lieu bi chan',
+        //     ], 401);
+        // }
     }
 
     public function SaveMail(Request $req){
@@ -25,15 +37,7 @@ class MailController extends Controller
         //$userId = (string)auth()->user()->user_id;
         $updateModifiedDate = (string)Carbon::now()->toDateString();
         $mailIdInit = 'MAIL_'.str_replace('-','', $updateModifiedDate).'_'.$randNum.'_'.$userId;
-        
-        // validate tren front-end
-
-        // $req->validate([
-        //     'subject' => 'required',
-        //     'content' => 'required',
-        //     'to' => 'required',
-        // ]);
-
+    
         $data = $req->all();
 
         $getUserName = (string)auth()->user()->display_name;
@@ -62,8 +66,8 @@ class MailController extends Controller
         $getMailsDataForSending = Mail::where('from', $getUserEmail)->get();
         for($i = 0; $i <= $getMailsDataForSending->count(); $i++){
             $getAddressTo = $getMailsDataForSending->to;
-            $getAddressCC = $getMailsDataForSending->cc;
-            $getAddressBCC = $getMailsDataForSending->bcc;
+            //$getAddressCC = $getMailsDataForSending->cc;
+            //$getAddressBCC = $getMailsDataForSending->bcc;
             $getAttachment = $getMailsDataForSending->attachment;
             $getSubject = $getMailsDataForSending->subject;
             $getContent = $getMailsDataForSending->content;
@@ -83,13 +87,13 @@ class MailController extends Controller
                 $mail->setFrom($getUserEmail, $getUserName);
                 $mail->addAddress($getAddressTo, $getAddressTo);     //Add a recipient
 
-                if($getAddressCC){
-                    $mail->addCC($getAddressCC);
+                // if($getAddressCC){
+                //     $mail->addCC($getAddressCC);
                     
-                } else if($getAddressBCC){
-                    $mail->addBCC($getAddressBCC);
-                }
-                else if($getAttachment) {
+                // } else if($getAddressBCC){
+                //     $mail->addBCC($getAddressBCC);
+                // }
+                if($getAttachment) {
                     $mail->addAttachment('/var/tmp/'.$getAttachment);
                 }
 
@@ -108,13 +112,13 @@ class MailController extends Controller
                 // echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
                 return response()->json([
                     'mail_status' => 'Khong the gui e-mail, hay kiem tra ket noi Internet',
+                    // 'mailer_error' => $mail->ErrorInfo,
                 ]);
             }
         }
 
-        return response()->json(
-            [
-                'mail_status' => 'Gui e-mail thanh cong',
+        return response()->json([
+                'mail_status' => 'Gui e-mail thanh cong (200)',
             ]
         );
     }

@@ -11,13 +11,16 @@ class Mail extends Model
 
     protected $fillable = [
         'mail_id',
+        'user_id',
         'from',
         'to',
-        'cc',
-        'bcc',
+        //'cc',
+        //'bcc',
         'attachment',
         'subject',
         'content',
+        'status',
         'time_sent',
     ];
+    public $timestamps = false;
 }
