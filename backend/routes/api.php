@@ -9,6 +9,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Validation\ValidationException;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SuggestionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,3 +40,4 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'LogOut']);
     Route::get('/profile', [AuthController::class, 'Profile']);
 });
+Route::get('/suggest', [SuggestionController::class, 'GetSuggestion']);

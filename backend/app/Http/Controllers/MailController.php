@@ -50,7 +50,7 @@ class MailController extends Controller
         $data['mail_id'] = $mailIdInit;
         $data['from'] = $getUserEmail;
         $data['time_sent'] = $updateModifiedDate;
-        $data['status'] = '1';
+        $data['status'] = 'n';  // khoi tao trang thai chua gui (no)
 
         Mail::create($data);
            
@@ -61,6 +61,7 @@ class MailController extends Controller
     }
 
     public function SendMail(){
+        $userId = (string)auth()->user()->user_id;
         $getUserName = (string)auth()->user()->display_name;
         $getUserEmail = (string)auth()->user()->email;
         $getSMTP_Password = (string)auth()->user()->smtp_password;
@@ -75,6 +76,9 @@ class MailController extends Controller
             $getAttachment = $mailData->attachment;
             $getSubject = $mailData->subject;
             $getContent = $mailData->content;
+            $mailId = $mailData->mail_id;
+
+            $getEverySingleMail = Mail::where('user_id', $userId)->where('status', 'n')->where('mail_id', $mailId)->first();
 
             $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
             try {
@@ -110,10 +114,12 @@ class MailController extends Controller
             
                 $mail->send();
 
-                $data['status'] = '1';
+                $data['status'] = 'y'; // yes (da gui)
+
+                $getEverySingleMail->update($data);
                 //echo 'Message has been sent';
             } catch (Exception $e) {
-                $data['status'] = '0';
+               // $data['status'] = 'n'; // no (chua gui duoc)
                 // echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
                 return response()->json([
                     'mail_status' => 'Khong the gui e-mail, hay kiem tra ket noi Internet',
