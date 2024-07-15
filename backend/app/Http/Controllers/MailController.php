@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
 
 class MailController extends Controller
 {
@@ -65,14 +68,15 @@ class MailController extends Controller
         // Xu ly du lieu de gui e-mail
         
         $getMailsDataForSending = Mail::where('from', $getUserEmail)->get();
-        for($i = 0; $i <= $getMailsDataForSending->count(); $i++){
-            $getAddressTo = $getMailsDataForSending->to;
-            //$getAddressCC = $getMailsDataForSending->cc;
-            //$getAddressBCC = $getMailsDataForSending->bcc;
-            $getAttachment = $getMailsDataForSending->attachment;
-            $getSubject = $getMailsDataForSending->subject;
-            $getContent = $getMailsDataForSending->content;
+        foreach ($getMailsDataForSending as $mailData) {
+            $getAddressTo = $mailData->to;
+            //$getAddressCC = $mailData->cc;
+            //$getAddressBCC = $mailData->bcc;
+            $getAttachment = $mailData->attachment;
+            $getSubject = $mailData->subject;
+            $getContent = $mailData->content;
 
+            $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
             try {
                 //Server settings
                 $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
