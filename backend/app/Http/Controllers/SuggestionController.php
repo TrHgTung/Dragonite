@@ -11,6 +11,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 
 class SuggestionController extends Controller
 {
@@ -21,12 +22,31 @@ class SuggestionController extends Controller
         $result = array();
         foreach($getMailContentFromHistory as $data){
             if(strlen($data) > 15){
-                $result = $data;
+                $result[] = $data;
             }
         }
 
+        // for($i=0; $i < $getMailContentFromHistory->count(); $i++){
+        //     if(strlen($getMailContentFromHistory[$i]) > 15){
+        //         $result[] = $getMailContentFromHistory[$i];
+        //     }
+        // }
+
+        $processedArray = array_map(function ($sentence) {
+            $words = explode(' ', $sentence);
+            $filteredWords = array();
+    
+            foreach ($words as $index => $word) {
+                if ($index == 0 || !ctype_upper($word[0])) {  // Xoa cac tu viet hoa (ten rieng), nhung giu nguyen nhung tu dau cau
+                    $filteredWords[] = $word;
+                }
+            }
+    
+            return implode(' ', $filteredWords);
+        }, $result);
+
         return response()->json([
-            'data' => $result,
+            'data' => $processedArray,
         ]);
     }
 }
