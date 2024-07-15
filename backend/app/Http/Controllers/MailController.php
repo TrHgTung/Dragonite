@@ -34,7 +34,7 @@ class MailController extends Controller
 
     public function SaveMail(Request $req){
         $randNum = (string)rand(1111,9999);
-        //$userId = (string)auth()->user()->user_id;
+        $userId = (string)auth()->user()->user_id;
         $updateModifiedDate = (string)Carbon::now()->toDateString();
         $mailIdInit = 'MAIL_'.str_replace('-','', $updateModifiedDate).'_'.$randNum.'_'.$userId;
     
@@ -43,6 +43,7 @@ class MailController extends Controller
         $getUserName = (string)auth()->user()->display_name;
         $getUserEmail = (string)auth()->user()->email;
 
+        $data['user_id'] = $userId;
         $data['mail_id'] = $mailIdInit;
         $data['from'] = $getUserEmail;
         $data['time_sent'] = $updateModifiedDate;
