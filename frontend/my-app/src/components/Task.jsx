@@ -116,7 +116,7 @@ const Task = () => {
                 //assistant: assistant,
                 smtp: smtp // Sửa lỗi gán 'deadline' vào 'email'
             };
-            const response = await axios.post(`http://127.0.0.1:4401/api/send`, sendData,
+            const response = await axios.post(`${SERVER_API}${API_ENDPOINT}/send`, sendData,
                 {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -171,7 +171,7 @@ const Task = () => {
             <tbody>
                 {(data.length === 0) ? (
                     <tr>
-                        <td colSpan="7" className="text-center">Không có lời nhắc khả dụng</td>
+                        <td colSpan="7" className="text-center">Không có thư khả dụng</td>
                     </tr>
                 ) : (
                     // pokemonTaskName.map(pokemons => (

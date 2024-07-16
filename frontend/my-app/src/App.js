@@ -8,6 +8,7 @@ import Register from './components/Register';
 import Layout from './components/Layout';
 import { AuthProvider } from './supports/AuthProvider';
 import PrivateRoute from './supports/PrivateRoute';
+import Suggest from './components/Suggest';
 
 function App() {
   return (
@@ -24,6 +25,14 @@ function App() {
                 element={
                     <PrivateRoute>
                         <Layout />
+                    </PrivateRoute>
+                } 
+            />
+            <Route 
+                path="/suggest" 
+                element={
+                    <PrivateRoute>
+                        <Suggest />
                     </PrivateRoute>
                 } 
             />

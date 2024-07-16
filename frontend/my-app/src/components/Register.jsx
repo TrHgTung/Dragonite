@@ -13,7 +13,7 @@ const Register = () => {
         email: '',
         password: '', 
         confirm_password: '', 
-        assist_id: '', 
+        smtp_password: '', // for send mail
     });
     const [selectOption, setSelectOption] = useState('0');
     const navigate = useNavigate();
@@ -39,7 +39,7 @@ const Register = () => {
                 display_name: formData.display_name,
                 email: formData.email,
                 password: formData.password,
-                assist_id: formData.assist_id,
+                smtp_password: formData.smtp_password,
             },  { withCredentials: true });
 
             if(response.data.success){
@@ -65,9 +65,7 @@ const Register = () => {
             <form onSubmit={handleRegister}>
                 <div className="row">
                     <div className="col-md-6 mt-5">
-                        <i>Hình ảnh về trợ thủ của bạn sẽ xuất hiện tại đây</i>
-                        {/* Chen hinh anh bang cach bat su kien click option */}
-                        {selectOption !== '0' && <img src={`/assets/${selectOption}.png`} className='img-need-hover' alt=''/>}
+                        <img src="/bg/0_1.png"  alt=''/>
                     </div>
                     <div className="col-md-6">
                         <h2 className='w-100 d-flex justify-content-center p-3 mt-3'>Đăng ký sử dụng</h2>
@@ -121,33 +119,27 @@ const Register = () => {
                             />
                         </div>
                         <div className="form-floating mt-4 mb-4">
-                            <label htmlFor="assist_id">Chọn một trợ lý**: </label>
-                            <select
-                                name="assist_id"
-                                id="assist_id"
-                                className='form-control'
-                                value={formData.assist_id}
-                                onChange={handleChange}
-                            >
-                                <option className='text-secondary font-weight-bold' value="0">...</option>
-                                <option className='text-success font-weight-bold' value="1">+Venusaur*</option>
-                                <option className='text-warning font-weight-bold' value="2">+Pikachu*</option>
-                                <option className='text-danger font-weight-bold' value="3">+Charizard*</option>
-                                <option className='text-secondary font-weight-bold' value="4">+Umbreon*</option>
-                                <option className='text-primary font-weight-bold' value="5">+Lapras*</option>
-                                <option className='text-secondary font-weight-bold' value="0">Tôi không cần trợ lý</option>
-                            </select>
+                            <label htmlFor='confirm_password'>Nhập mật khẩu SMTP*:</label>
+                            <input 
+                                type="text" 
+                                className="form-control" 
+                                id="smtp_password" 
+                                name="smtp_password" 
+                                value={formData.smtp_password} 
+                                onChange={handleChange} 
+                                required 
+                            />
                         </div>
+                        
                         <button className="btn btn-primary w-100 py-2" type="submit">Đăng ký</button>
                         <div className='mt-3'>
                             <p>Đã có tài khoản? <Link to="/login">Quay về đăng nhập</Link></p>
                         </div>
                     </div>
                     <div>
-                        <p className='p-0.25'>*: Dấu cộng đặt trước tên Pokémon, tức là sẽ có sự xuất hiện của tất cả dạng tiến hóa của Pokémon đó</p>
-                        <p className='p-0.25'>**: Trợ lý sẽ sử dụng hình ảnh của Pokémon*** mà bạn đã đăng ký cùng với tài khoản, để đồng hành và hỗ trợ bạn hoàn thành tất cả các lời nhắc đúng hạn.</p>
-                        <p className='p-0.25'>***: Pokémon is a Japanese media franchise consisting of video games, animated series and films, a trading card game, and other related media. </p><br />
-                        <p><b>Tác quyền & Hình ảnh (<i>Pokémon &copy;</i>):</b> <i> The Pokémon Company, GameFreak, Nintendo</i></p>
+                        <p className='p-0.25'>*: Truy cập <a href="https://myaccount.google.com/apppasswords">https://myaccount.google.com/apppasswords</a> và làm theo hướng dẫn của <i>Google </i>để lấy mật khẩu ứng dụng (cho mục đích gửi e-mail bằng phương thức SMTP)</p>
+                        
+                        <p><b>Tác quyền & Hình ảnh: </b> <i> The Pokémon Company, GameFreak, Nintendo</i></p>
                         <p><strong>Mã nguồn</strong>: <i>Hoàng Tùng</i></p>
                     </div>
                 </div>

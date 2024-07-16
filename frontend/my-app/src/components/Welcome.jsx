@@ -26,7 +26,8 @@ const Welcome = () => {
   }, []);
 
   const HandleAbout = () => {
-    window.alert('Mã nguồn: GitHub/@TrHgTung');
+    // window.alert('Mã nguồn: GitHub/@TrHgTung');
+    toast.success('Mã nguồn thuộc về GitHub/@TrHgTung');
   }
 
   const logout = () => {
@@ -34,6 +35,7 @@ const Welcome = () => {
     localStorage.removeItem('user_id');
     localStorage.removeItem('email');
     localStorage.removeItem('SMTP_password');
+    localStorage.removeItem('assistant');
     setAuth({ 
         token: null,
         isAuthenticated: false 

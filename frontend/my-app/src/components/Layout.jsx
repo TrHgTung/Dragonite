@@ -108,6 +108,7 @@ const Layout = ()  => {
     localStorage.removeItem('user_id');
     localStorage.removeItem('email');
     localStorage.removeItem('SMTP_password');
+    localStorage.removeItem('assistant');
     // localStorage.removeItem('pokemon_name');
     setAuth({ 
         token: null,
@@ -163,7 +164,7 @@ const Layout = ()  => {
                 <h4>Thêm nội dung thư của bạn</h4>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3 mt-3">
-                        <label htmlFor='content' className="form-label">Tiêu đề thư (title mail):</label>
+                        <label htmlFor='content' className="form-label">Tiêu đề thư (e-mail subject):</label>
                         <input type='text' 
                           className='form-control' 
                           id='subject' 
@@ -174,7 +175,7 @@ const Layout = ()  => {
                         />
                     </div>
                     <div className="mb-3 mt-3">
-                        <label htmlFor='content' className="form-label">Nội dung thư (body mail):</label>
+                        <label htmlFor='content' className="form-label">Nội dung thư (e-mail content):</label>
                         <input type='text' 
                           className='form-control' 
                           id='content' 
@@ -183,9 +184,10 @@ const Layout = ()  => {
                           value={formData.content}
                           onChange={handleChange}
                         />
+                        <small>Lời khuyên: <a href="/suggest" className='no-underline-link'>Lấy nội dung được gợi ý</a></small>
                     </div>
                     <div className="mb-3 mt-3">
-                        <label htmlFor='attachment' className="form-label">Tệp đính kèm (attachment):</label>
+                        <label htmlFor='attachment' className="form-label">Tệp đính kèm (file attachment):</label>
                         <input type='file' 
                           className='form-control' 
                           id='attachment' 
