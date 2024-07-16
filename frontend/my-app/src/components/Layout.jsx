@@ -132,9 +132,8 @@ const Layout = ()  => {
           <div className="col-2 col-md-2 mb-4 mt-3">
             <a href="/welcome" className='no-underline-link'>&lt; Quay lại Trang chủ</a>
           </div>
-          <div className="col-md-8 col-8 text-center mb-4 mt-3">
-            <h2 className='w-100 d-flex justify-content-center'>Gửi thư đồng loạt</h2>
-            <h5 className='justify-content-center'><i>(Dragonite - Beta Dev.)</i></h5>
+          <div className="col-md-8 col-8 text-center mb-3 mt-5">
+            <h3 className='w-100 d-flex justify-content-center'>Hệ thống gửi thư đồng loạt - Dragonite</h3>
             <small><i>Người dùng: {display_name}* - Trợ lý chính:  
                 {assist_id_main === '1' && ' Venusaur'}
                 {assist_id_main === '2' && ' Pikachu'}
@@ -161,7 +160,7 @@ const Layout = ()  => {
         </div>
         <div className="row">
             <div className="col-md-4">
-                <h4>Thêm nội dung thư của bạn</h4>
+                <h5>Thêm nội dung thư của bạn</h5>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3 mt-3">
                         <label htmlFor='content' className="form-label">Tiêu đề thư (e-mail subject):</label>

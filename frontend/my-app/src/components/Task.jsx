@@ -16,7 +16,7 @@ const Task = () => {
     const { auth } = useAuth();
     const navigate = useNavigate();
     let stt = 1;
-    const pokemonName = localStorage.getItem('pokemon_name');
+    // const pokemonName = localStorage.getItem('pokemon_name');
     const assistId = localStorage.getItem('assist_id');
 
     const [sendData, setSendData] = useState({
