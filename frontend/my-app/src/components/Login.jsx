@@ -14,7 +14,7 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [assist, setAssist] = useState('');
+    //const [assist, setAssist] = useState('');
     const { login } = useAuth();
     const navigate = useNavigate();
     
@@ -45,17 +45,17 @@ const Login = () => {
                     progress: undefined,
                 });
 
-                setAssist(response.data.assist_id);
+                //setAssist(response.data.assist_id);
 
-                localStorage.setItem('username', email);
-                localStorage.setItem('assist_id', response.data.assist_id);
-                localStorage.setItem('display_name', response.data.display_name);
-                localStorage.setItem('pokemon_name', response.data.pokemon_name);
+                localStorage.setItem('email', email);
+                localStorage.setItem('user_id', response.data.user.user_id);
+                localStorage.setItem('SMTP_password', response.data.SMTP_pswrd);
+                //localStorage.setItem('pokemon_name', response.data.pokemon_name);
                 // localStorage.setItem('assist_id2', assist);
                 navigate('/');
             } else {
                 console.log('Đăng nhập thất bại (no token found');
-                toast.error('Đăng nhập thất bại.', {
+                toast.error('Đăng nhập thất bại 401.', {
                     position: "top-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -69,7 +69,7 @@ const Login = () => {
             // navigate('/');
         }
         catch (error) {
-            toast.error('Đăng nhập thất bại.', {
+            toast.error('Đăng nhập thất bại 404.', {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -78,7 +78,7 @@ const Login = () => {
                 draggable: true,
                 progress: undefined,
             });
-            console.log('Đăng nhập thất bại (cannot authenticate)');
+            console.log(error);
         }
     };
   

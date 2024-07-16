@@ -39,5 +39,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // User information
     Route::post('/logout', [AuthController::class, 'LogOut']);
     Route::get('/profile', [AuthController::class, 'Profile']);
+    Route::patch('/finish/mail/{id}', [MailController::class, 'Remove']);
 });
 Route::get('/suggest', [SuggestionController::class, 'GetSuggestion']);

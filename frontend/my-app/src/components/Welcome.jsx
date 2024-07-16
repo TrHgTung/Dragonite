@@ -12,7 +12,7 @@ const Welcome = () => {
 });
 
   const handleNavigation = () => {
-    const check_username = localStorage.getItem('username');
+    const check_username = localStorage.getItem('token');
     if (check_username) {
       navigate('/');
     } else {
@@ -31,10 +31,9 @@ const Welcome = () => {
 
   const logout = () => {
     localStorage.removeItem('token');
-    localStorage.removeItem('username');
-    localStorage.removeItem('assist_id');
-    localStorage.removeItem('display_name');
-    localStorage.removeItem('pokemon_name');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('email');
+    localStorage.removeItem('SMTP_password');
     setAuth({ 
         token: null,
         isAuthenticated: false 

@@ -33,3 +33,7 @@
 .img-need-hover-login:hover {
   transform: scale(1.2);
 }
+
+.disable-cursor{
+  cursor: not-allowed;
+}

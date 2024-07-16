@@ -8,13 +8,11 @@ import { toast } from 'react-toastify';
 
 const {SERVER_API} = host;
 const {API_ENDPOINT} = host;
-const {MAIL_API_ENDPOINT} = host;
-const {MAIL_SERVER_API} = host;
 
 const Task = () => {
     const [data, setData] = useState('');
-    const [pokemonTaskName, setPokemonTaskName] = useState('');
-    const [deadline, setDeadline] = useState('');
+    //const [pokemonTaskName, setPokemonTaskName] = useState('');
+    //const [deadline, setDeadline] = useState('');
     const { auth } = useAuth();
     const navigate = useNavigate();
     let stt = 1;
@@ -31,15 +29,15 @@ const Task = () => {
         // const validToken = localStorage.getItem("token");
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${SERVER_API}${API_ENDPOINT}/jobs`, {
+                const response = await axios.get(`${SERVER_API}${API_ENDPOINT}/mails`, {
                     headers: {
                         Authorization: `Bearer ${auth.token}`
                     }
                 });
                 
-                setDeadline(response.data.result);
-                setData(response.data.result);
-                setPokemonTaskName(response.data.get_pokemon_name);
+                //setDeadline(response.data.result);
+                setData(response.data.data);
+                //setPokemonTaskName(response.data.get_pokemon_name);
                 //setCheckDeadline(response.data.check_time);
 
                 // console.log("Check Deadline: " + checkDeadline.character_name)              
@@ -52,22 +50,18 @@ const Task = () => {
         fetchData();
     }, [auth.token]);    
     
-    if (!data || !pokemonTaskName) {
-        return <div>Đang tải dữ liệu...</div>;
-    }
+    // if (!data || !pokemonTaskName) {
+    //     return <div>Đang tải dữ liệu...</div>;
+    // }
 
-    const handleUpdateClick = (jobId) => {
-        navigate(`/update/${jobId}`);
-    };
-
-    // const directToAssistant = (jobId) => {
-    //     navigate(`/assistant-zone/${jobId}`);
+    // const handleUpdateClick = (jobId) => {
+    //     navigate(`/update/${jobId}`);
     // };
-  
-    const handleHoanThanhTask = async (jobId) => {
+
+    const removeMailFromStack = async (mailId) => {
         try {
             await axios.get(`${SERVER_API}/sanctum/csrf-cookie`, { withCredentials: true });
-            const response = await axios.patch(`${SERVER_API}${API_ENDPOINT}/finish/job/${jobId}`, 
+            const response = await axios.patch(`${SERVER_API}${API_ENDPOINT}/finish/mail/${mailId}`, 
                 // status: '0' // Cap nhat thanh '0' (hoan thanhf Task)
                 null, {
                 headers: {
@@ -89,9 +83,19 @@ const Task = () => {
                 // });
                 // setData(updatedJobs);
                 // console.log(response.headers)
+                // 
                 console.log('Đã đánh dấu hoàn thành');
                 window.location.reload();
             } else {
+                toast.warning('Hãy tải lại trang', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                  });
                 // console.log(response.headers)
                 console.error('Không thể hoàn thành, có lỗi xảy ra');
             }
@@ -100,24 +104,27 @@ const Task = () => {
         }
     };
 
-    const sendMailFunction = async (e) => {
+    const sendMailFunction = async (e) => { // sendAll MAils
         e.preventDefault();
         try {
-            const email = localStorage.getItem('username');
+            const email = localStorage.getItem('email');
             //const assistant = localStorage.getItem('pokemon_name');
-            const deadline = localStorage.getItem('deadline');
+            const smtp = localStorage.getItem('SMTP_password');
          
             const sendData = {
                 email: email,
                 //assistant: assistant,
-                deadline: deadline // Sửa lỗi gán 'deadline' vào 'email'
+                smtp: smtp // Sửa lỗi gán 'deadline' vào 'email'
             };
-            const response = await axios.post(`http://127.0.0.1:5000/api/send`, sendData,
+            const response = await axios.post(`http://127.0.0.1:4401/api/send`, sendData,
                 {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'application/json',
+                        'Charset':'utf-8',
                         'Access-Control-Allow-Origin': '*',
-                        'supports_credentials' : true
+                        'supports_credentials' : true,
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
                     }
                 },
                 {withCredentials: true}
@@ -132,65 +139,33 @@ const Task = () => {
         } catch (error) {
             console.error('Error:', error);
         }
-        e.target.innerHTML = '<div></div>';
+        e.target.innerHTML = '<p style="cursor:not-allowed">Đang gửi e-mail</p>';
     };
    
-    let dl = [];
-    let dateOnDeadline = '';
-    for(let i = 0; i < deadline.length; i++){
-        dl.push(deadline[i].deadline);
-    }
-    console.log(dl);
-    let dates = [];
-    
-    dl.forEach(datetime => {
-        let date = datetime.substring(0, 10);
-        dates.push(date);
-    });
-    
-    console.log('Dinh dang xu ly: ' + dates);// ***
-    let now = new Date();
-    let year = now.getFullYear();
-    let month = (now.getMonth() + 1).toString().padStart(2, '0'); // Thêm '0' phía trước nếu cần thiết
-    let day = now.getDate().toString().padStart(2, '0'); // Thêm '0' phía trước nếu cần thiết
-    let formatDate = `${year}-${month}-${day}`;
-    console.log(`Ngày tháng năm hiện tại: ${formatDate}`); 
-    // let result_date = [];
-    
-    for(let i = 0; i < dates.length; i++){
-        if(dates[i] == formatDate){
-            dateOnDeadline = dates[i];
-        }
-    }
-    if(dateOnDeadline){
-        localStorage.setItem('deadline', dateOnDeadline);
-        console.log(dateOnDeadline);
-    }
-    else {
-        localStorage.removeItem('deadline');
-        console.log('Không có lời nhắc nào đến hạn');
-    }
-
     return (
       <div className='container'>
-        <div>
+        {/* <div>
             {(dateOnDeadline) ? (
                 <div className='text-danger mb-4 mt-1' onClick={sendMailFunction} id="notification-on-centerr">CẢNH BÁO: Có lời nhắc sắp đến hạn hôm nay, hãy kiểm tra lại<br />Nhấn vào đây để tắt</div>
             ) : (
                 <div className='mb-4 mt-1'><i>Hãy hover vào từng trợ thủ để xem chúng nhắc bạn điều gì</i></div>
             )}
+        </div> */}
+        <h4>Danh sách e-mail (E-mail Stack)</h4>
+        <div className='mb-4 text-danger'>
+            <i>Các e-mail phía dưới đang được chờ để gửi đi. Hãy kiểm tra thật cẩn thận trước khi nhấn nút <strong>Gửi toàn bộ</strong>, vì không thể hoàn tác sau khi thực hiện nhấn nút.</i>
         </div>
-        <h4>Danh sách lời nhắc cần hoàn thành</h4>
         <table className="table table-striped">
             <thead>
                 <tr>
                     <th scope="col">STT</th>
-                    <th scope="col">Nội dung công việc</th>
-                    <th scope="col">Thời hạn</th>
-                    <th scope="col">Mức ưu tiên</th>
-                    <th scope="col">Trợ thủ</th>
-                    <th scope="col">Cập nhật công việc</th>
-                    <th scope="col">Hoàn thành công việc</th>
+                    <th scope="col">Tiêu đề thư</th>
+                    <th scope="col">Nội dung thư</th>
+                    <th scope="col">Đính kèm tệp</th>
+                    <th scope="col">Gửi đến địa chỉ</th>
+                    {/* <th scope="col">Trợ thủ</th> */}
+                    {/* <th scope="col">Cập nhật công việc</th> */}
+                    <th scope="col">Gỡ khỏi stack</th>
                 </tr>
             </thead>
             <tbody>
@@ -200,21 +175,25 @@ const Task = () => {
                     </tr>
                 ) : (
                     // pokemonTaskName.map(pokemons => (
-                        data.map((jobs, index) => (
-                            jobs.status === '1' && (
-                                <tr key={jobs.id}>
+                        data.map((mails) => (
+                            // mails.status === '1' && 
+                            (
+                                <tr key={mails.id}>
                                     <td>{stt++}</td>
-                                    <td>{jobs.content}</td>
-                                    <td>{jobs.deadline}</td>
-                                    {jobs.priority_level === 'easy' && <p className='text-success'><BsEmojiSmile /> Thấp</p>}
-                                    {jobs.priority_level === 'middle' && <p className='text-warning'><BsEmojiAstonished /> Trung bình</p>}
-                                    {jobs.priority_level === 'difficult' && <p className='text-danger'><BsEmojiAngry /> Cao</p>}
-                                    <td>{pokemonTaskName[index] ? (<a className='force-link link-offset-2 link-underline link-underline-opacity-0' >{pokemonTaskName[index].character_name}</a> ) : (<p>Lời nhắc này không có trợ thủ!</p>)}</td>
+                                    <td>{mails.subject}</td>
+                                    <td>{mails.content}</td>
+                                    <td>{mails.attachment == null && <p>Không có</p>}
+                                        {mails.attachment != '' && mails.attachment}</td>
+                                    <td>{mails.to}</td>
+                                    {/* {mails.priority_level === 'easy' && <p className='text-success'><BsEmojiSmile /> Thấp</p>}
+                                    {mails.priority_level === 'middle' && <p className='text-warning'><BsEmojiAstonished /> Trung bình</p>}
+                                    {mails.priority_level === 'difficult' && <p className='text-danger'><BsEmojiAngry /> Cao</p>} */}
+                                    {/* <td>{pokemonTaskName[index] ? (<a className='force-link link-offset-2 link-underline link-underline-opacity-0' >{pokemonTaskName[index].character_name}</a> ) : (<p>Lời nhắc này không có trợ thủ!</p>)}</td> */}
+                                    {/* <td>
+                                        <button onClick={ () => handleUpdateClick(mails.id) } className='btn btn-sm btn-secondary'>Chỉnh sửa</button>
+                                    </td> */}
                                     <td>
-                                        <button onClick={ () => handleUpdateClick(jobs.id) } className='btn btn-sm btn-secondary'>Chỉnh sửa</button>
-                                    </td>
-                                    <td>
-                                        <button onClick={ () => handleHoanThanhTask(jobs.id) } className='btn btn-sm btn-success ms-2'>Đánh dấu h.tất</button>
+                                        <button className='btn btn-danger' onClick={ () => removeMailFromStack(mails.id)}>X</button>
                                     </td>
                                 </tr>
                                 // ))
@@ -223,11 +202,18 @@ const Task = () => {
                     ))}
             </tbody>
         </table>
-        <div>
+        <div className='text-center mt-4 mb-4'>
+            {(data.length > 0) ? (
+                <button className='btn btn-primary' onClick={sendMailFunction}>Gửi toàn bộ thư ở trên</button>
+            ) : (
+                ''
+            )}
+        </div>
+        {/* <div>
            {assistId !== '0' && data.length !== 0 && <img src={`/assets/${assistId}.png`} className='img-need-hover-login' alt={`${pokemonName}`} title={`${pokemonName} thắc mắc rằng bạn đã hoàn thành mọi công việc hay chưa?`} width={`40%`} height={`30%`} />}
            {assistId === '0' && <></>}
            {assistId !== '0' && data.length === 0 && <img src={`/assets/${assistId}.png`} className='img-need-hover-login' alt={`${pokemonName}`} title={`${pokemonName} đang vui vẻ vì bạn đang rảnh rỗi`} width={`40%`} height={`30%`} />}
-        </div>
+        </div> */}
       </div>
     )
   }

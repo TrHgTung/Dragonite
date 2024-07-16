@@ -22,10 +22,14 @@ class MailController extends Controller
             $userId = (string)auth()->user()->user_id; 
             $getSMTP_Password = (string)auth()->user()->smtp_password;
 
-            $getMailsByUsrId = Mail::where('user_id', $userId)->where('status', '1')->get();
+            $getMailsByUsrId = Mail::where('user_id', $userId)->where('status', 'n')->get();
+            $getSentMail = Mail::where('user_id', $userId)->where('status', 'y')->get();
+            $getNumberOfSentMail = Mail::where('user_id', $userId)->where('status', 'y')->get()->count();
 
             return response([
                 'data' => $getMailsByUsrId,
+                'all_mails_sent' => $getSentMail,
+                'the_number_of_mail_sent' => $getNumberOfSentMail,
             ], 200);
         // } 
         // catch (Exception $e){
@@ -60,15 +64,19 @@ class MailController extends Controller
         );
     }
 
-    public function SendMail(){
+    public function SendMail(Request $req){
         $userId = (string)auth()->user()->user_id;
         $getUserName = (string)auth()->user()->display_name;
-        $getUserEmail = (string)auth()->user()->email;
-        $getSMTP_Password = (string)auth()->user()->smtp_password;
+        // $getUserEmail = (string)auth()->user()->email;
+        // $getSMTP_Password = (string)auth()->user()->smtp_password;
+
+        // Lay du lieu tu front-end
+        $getUserEmail = (string)$req->email;
+        $getSMTP_Password = (string)$req->smtp;
 
         // Xu ly du lieu de gui e-mail
         
-        $getMailsDataForSending = Mail::where('from', $getUserEmail)->get();
+        $getMailsDataForSending = Mail::where('from', $getUserEmail)->where('status', 'n')->get();
         foreach ($getMailsDataForSending as $mailData) {
             $getAddressTo = $mailData->to;
             //$getAddressCC = $mailData->cc;
@@ -80,8 +88,10 @@ class MailController extends Controller
 
             $getEverySingleMail = Mail::where('user_id', $userId)->where('status', 'n')->where('mail_id', $mailId)->first();
 
+            // $mail->CharSet = "UTF-8";
             $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
             try {
+                $mail->CharSet = "UTF-8";
                 //Server settings
                 $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
                 $mail->isSMTP();                                            //Send using SMTP
@@ -146,9 +156,36 @@ class MailController extends Controller
         else{
             return response([
                 'message' => 'Nội dung không tìm thấy hoặc không thuộc về bạn',
-            ], 401);
+            ], 404);
         }
         
     } 
+
+    public function Remove($id){
+        //$data['status'] = 'y';
+        $userId = (string)auth()->user()->user_id;
+        $getMailById = Mail::where('user_id', $userId)->where('status', 'n')->where('id', $id)->first();
+
+        if (!$getMailById) {
+            return response()->json([
+                'error' => 'Không tìm thấy mail'
+            ], 404);
+        }
+        else if($getMailById){
+            $data['status'] = 'y';
+    
+            $getMailById->update($data);
+            
+            return response()->json([
+                'message' => 'Đã xóa mail: '. $id
+            ], 200);
+        }
+        else{
+            return response()->json([
+                'message' => 'Not Authorized',
+            ], 401);
+        }
+
+    }
 
 }
