@@ -62,14 +62,17 @@ const Register = () => {
 
   return (
     <div className="container">
+        <div className='mt-4'>
+            <a href="/login" className='no-underline-link'>&lt; Quay lại Đăng nhập</a>
+        </div>
             <form onSubmit={handleRegister}>
                 <div className="row">
                     <div className="col-md-6 mt-5">
-                        <img src="/bg/0_1.png"  alt=''/>
+                        <img src="/bg/0.png"  alt=''/>
                     </div>
                     <div className="col-md-6">
                         <h2 className='w-100 d-flex justify-content-center p-3 mt-3'>Đăng ký sử dụng</h2>
-                        <p className='text-center'><i>Hãy bắt đầu sử dụng Lời nhắc</i></p>
+                        <p className='text-center'><i>Một lần đăng ký cho tất cả các phiên đăng nhập</i></p>
                         <div className="form-floating mt-4">
                             <label htmlFor='display_name'>Tên hiển thị:</label>
                             <input 
@@ -132,8 +135,11 @@ const Register = () => {
                         </div>
                         
                         <button className="btn btn-primary w-100 py-2" type="submit">Đăng ký</button>
-                        <div className='mt-3'>
-                            <p>Đã có tài khoản? <Link to="/login">Quay về đăng nhập</Link></p>
+                        <div className='row mt-3'>
+                            <div className="col-6 col-md-6"></div>
+                            <div className='col-6 col-md-6'>
+                                <p>Đã có tài khoản? <Link to="/login">Quay về đăng nhập</Link></p>
+                            </div>
                         </div>
                     </div>
                     <div>

@@ -91,12 +91,12 @@ const Login = () => {
             <form onSubmit={handleLogin} autoComplete='off'>
                 <div className="row">
                     <div className="col-md-6">
-                        <img src="/bg/0_1.png" alt="review-pokemon" />
+                        <img src="/bg/0.png" alt="review-pokemon" />
                     </div>
                     <div className="col-md-6">
                     <h2 className='w-100 d-flex justify-content-center p-3'>Yêu cầu xác thực người dùng</h2>
                         <div className="form-floating text-center">
-                            <i>Bạn phải đăng nhập để có thể xem được các lời nhắc của mình</i>
+                            <i>Bạn phải đăng nhập để có thể xem được nội dung của mình</i>
                         </div>
                         <div className="form-floating mt-4">
                             <label htmlFor='email'>E-mail đăng nhập:</label>
@@ -109,7 +109,7 @@ const Login = () => {
                         <button className="btn btn-primary w-100 py-2" type="submit">Đăng nhập</button>
                         {error && <p>{error}</p>}
                         <div className='mt-3'>
-                            <p>Bạn chưa có tài khoản? Hãy bắt đầu <Link to="/register">đăng ký sử dụng Lời nhắc</Link></p>
+                            <p>Bạn chưa có tài khoản? Hãy bắt đầu <Link to="/register">đăng ký sử dụng</Link> ứng dụng</p>
                         </div>
                     </div>
                     

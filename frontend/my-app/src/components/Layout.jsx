@@ -13,7 +13,6 @@ const {SERVER_API} = host;
 const {API_ENDPOINT} = host;
 
 const Layout = ()  => {
-  const [selectOption, setSelectOption] = useState('');
   const [auth, setAuth] = useState({
     token : localStorage.getItem('token') || null,
     isAuthenticated : localStorage.getItem('token') ? true : false
@@ -238,8 +237,6 @@ const Layout = ()  => {
                 </form>
             </div>
             <div className="col-md-8">  
-              {selectOption !== '0' && <img src={`/assets/add/${selectOption}.png`} className='img-need-hover' alt=''/>}       
-              {selectOption === '1' && <p><i>Hình ảnh về trợ thủ của bạn sẽ xuất hiện tại đây, sau khi bạn nhấn qua từng mục trong trường <strong>'Chọn trợ thủ riêng cho lời nhắc'</strong></i></p>}       
                 <Task/>
             </div>
         </div>

@@ -27,7 +27,7 @@ const Welcome = () => {
 
   const HandleAbout = () => {
     // window.alert('Mã nguồn: GitHub/@TrHgTung');
-    toast.success('Mã nguồn thuộc về GitHub/@TrHgTung');
+    toast.success('Mã nguồn thuộc về Hoàng Tùng (GitHub/@TrHgTung)');
   }
 
   const logout = () => {
