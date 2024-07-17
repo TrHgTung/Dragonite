@@ -20,30 +20,36 @@ const Layout = ()  => {
   });
 
   const [formData, setFormData] = useState({
+    subject: '',
     content: '',
-    priority_level: '',
-    assist_id: '',
-    deadline: ''
+    attachment: null,
+    to: ''
   });
 
   const handleChange = (e) => {
-    const inputElement = document.getElementById('assist_id');
-    if(inputElement){
-      setSelectOption(inputElement.value);
-    }
-    const { name, value } = e.target;
+    const { name, files, value } = e.target;
     setFormData({
         ...formData,
-        [name]: value
+        [name]: files ? files[0] : value
     });
 };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const data = new FormData();
+    data.append('subject', formData.subject);
+    data.append('content', formData.content);
+    data.append('to', formData.to);
+    if (formData.attachment) {
+      data.append('attachment', formData.attachment);
+    }
+
     try {
-        const response = await axios.post(`${SERVER_API}${API_ENDPOINT}/save`, formData, {
+        const response = await axios.post(`${SERVER_API}${API_ENDPOINT}/save`, data, {
             headers: {
-              // 'Content-Type': `application/x-www-form-urlencoded`,
+                'Content-Type': `multipart/form-data`,
+                // 'Content-Type': 'application/x-www-form-urlencoded',
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
@@ -53,18 +59,26 @@ const Layout = ()  => {
             setFormData({
                 subject: '',
                 content: '',
-                attachment: '',
+                attachment: null,
                 to: ''
             });
-        } else {
-            setFormData({
-              subject: '',
-              content: '',
-              attachment: '',
-              to: ''
+            toast.success('Thêm thư thành công!', {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
             });
+        } else {
+            // setFormData({
+            //   subject: '',
+            //   content: '',
+            //   attachment: '',
+            //   to: ''
+            // });
             
-            toast.success('Đã thêm thành công. Hãy tải lại trang', {
+            toast.error('Không thể thêm thư', {
               position: "top-right",
               autoClose: 5000,
               hideProgressBar: false,
@@ -76,6 +90,14 @@ const Layout = ()  => {
             console.error('Failed to add task:', response.data.message);
         }
     } catch (error) {
+        toast.error('Đã xảy ra lỗi khi thêm thư.', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
         console.error('Error adding task:', error);
     }
   };
@@ -195,7 +217,7 @@ const Layout = ()  => {
                           className='form-control' 
                           id='attachment' 
                           name='attachment' 
-                          value={formData.attachment}
+                          // value={formData.attachment}
                           onChange={handleChange}
                         />
                     </div>
@@ -210,49 +232,6 @@ const Layout = ()  => {
                           onChange={handleChange}
                         />
                     </div>
-                    {/* <div className="mb-3 mt-3">
-                        <label htmlFor='priority_level' className="form-label">Mức ưu tiên:</label>
-                        <select
-                          name="priority_level"
-                          id="priority_level"
-                          className='form-control'
-                          value={formData.priority_level}
-                          onChange={handleChange}
-                        >
-                          <option className='text-success font-weight-bold' value="">-- Chọn 1 mức độ --</option>
-                          <option className='text-success font-weight-bold' value="easy">Mặc định</option>
-                          <option className='text-warning font-weight-bold' value="middle">Vừa phải</option>
-                          <option className='text-danger font-weight-bold' value="difficult">Cao</option>
-                        </select>
-                    </div> */}
-                    {/* <div className="mb-3 mt-3">
-                        <label htmlFor='assist_id' className="form-label">Chọn trợ thủ riêng cho lời nhắc:</label>
-                        <select
-                          name="assist_id"
-                          id="assist_id"
-                          className='form-control'
-                          value={formData.assist_id}
-                          onChange={handleChange}
-                        >
-                          <option className='text-primary font-weight-bold' value="">-- Chọn 1 trợ thủ --</option>
-                          <option className='text-primary font-weight-bold' value="2">Snorlax</option>
-                          <option className='text-success font-weight-bold' value="3">Leafeon</option>
-                          <option className='text-warning font-weight-bold' value="4">Lucario</option>
-                        </select>
-                    </div> */}
-                    {/* <div className="mb-3 mt-3">
-                        <label htmlFor='deadline' className="form-label">Thời hạn:</label>
-                        <input 
-                          type="datetime-local" 
-                          id="deadline" 
-                          name="deadline" 
-                          min="2024-01-01T00:00" 
-                          max="2038-01-19T03:14"
-                          className='form-control'
-                          value={formData.deadline}
-                          onChange={handleChange}
-                        ></input>
-                    </div> */}
                     <div className='text-center mt-4 mb-3'>
                       <button type="submit" className='btn btn-secondary mb-3'>Thêm thư này (Send to stack)</button>
                     </div>

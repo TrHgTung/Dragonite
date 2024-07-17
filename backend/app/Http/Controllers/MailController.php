@@ -56,6 +56,31 @@ class MailController extends Controller
         $data['time_sent'] = $updateModifiedDate;
         $data['status'] = 'n';  // khoi tao trang thai chua gui (no)
 
+        //$data['attachment'] = $req->file("attachment");
+        $getFile = $req->file('attachment');
+
+        if($req->hasFile('attachment')){
+            $getFileName = $getFile->getClientOriginalName();
+            // $realFileName = current(explode('.',$getFileName));
+            $realFileName = pathinfo($getFileName, PATHINFO_FILENAME);
+            $getFileExtension = $getFile->getClientOriginalExtension();
+
+            $getRandomNumberForAddingToFileName = rand(1111,9999);
+    
+            $newFileInit = 'FILE'.$getRandomNumberForAddingToFileName.'_'.$realFileName.'.'.$getFileExtension;
+    
+            $getFile->storeAs('var/tmp', $newFileInit, 'public');
+
+            $data['attachment'] = $newFileInit;
+
+            Mail::create($data);
+            
+            return response()->json([
+                'success' => true,
+                'data' => $data,
+            ], 200);
+        }
+
         Mail::create($data);
            
         return response()->json([
