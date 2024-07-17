@@ -19,13 +19,16 @@ class SuggestionController extends Controller
         $getMailContentFromHistory = Mail::pluck('content');
 
         // Goi y lay noi dung mail: Chi lay nhung content co do dai, va phai loai bo nhung ten/thong tin ca nhan
-        $result = array();
+        $res = array();
         foreach($getMailContentFromHistory as $data){
             if(strlen($data) > 15){
-                $result[] = $data;
+                $res[] = $data;
             }
         }
 
+        $result = array();
+        $result = array_unique($res);   // Xoa cac content trung lap
+        
         // for($i=0; $i < $getMailContentFromHistory->count(); $i++){
         //     if(strlen($getMailContentFromHistory[$i]) > 15){
         //         $result[] = $getMailContentFromHistory[$i];

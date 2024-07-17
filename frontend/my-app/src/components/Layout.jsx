@@ -126,6 +126,10 @@ const Layout = ()  => {
     navigate('/login');
 }
 
+  const showDragonite = () => {
+    toast.success('Bạn đã tìm thấy Dragonite! Bravo');
+  }
+
     return (
       <div className='container'>
         <div className="row">
@@ -134,13 +138,13 @@ const Layout = ()  => {
           </div>
           <div className="col-md-8 col-8 text-center mb-3 mt-5">
             <h3 className='w-100 d-flex justify-content-center'>Hệ thống gửi thư đồng loạt - Dragonite</h3>
-            <small><i>Người dùng: {display_name}* - Trợ lý chính:  
+            <small><i><strong>Người dùng:</strong> {display_name}* - <strong>Trợ lý:</strong>  
                 {assist_id_main === '1' && ' Venusaur'}
                 {assist_id_main === '2' && ' Pikachu'}
                 {assist_id_main === '3' && ' Charizard'}
                 {assist_id_main === '4' && ' Umbreon'}
                 {assist_id_main === '5' && ' Lapras'}
-                {assist_id_main === '6' && ' Dragonite'}
+                {assist_id_main === '6' && ( <a href="#" className="no-underline-link" onClick={showDragonite}> Dragonite</a>)}
                 {assist_id_main === '7' && ' Blastoise'}
                 {assist_id_main === '8' && ' Dragapult'}
                 {assist_id_main === '9' && ' Clefable'}

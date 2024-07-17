@@ -2,7 +2,6 @@ import React, { Component, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../supports/AuthProvider';
-import { BsEmojiSmile, BsEmojiAstonished, BsEmojiAngry } from "react-icons/bs";
 import host from '../config/host.json';
 import { toast } from 'react-toastify';
 
@@ -11,6 +10,8 @@ const {API_ENDPOINT} = host;
 
 const Task = () => {
     const [data, setData] = useState('');
+    const [countSent, setCountSent] = useState('');
+    const [serviceName, setServiceName] = useState('');
     //const [pokemonTaskName, setPokemonTaskName] = useState('');
     //const [deadline, setDeadline] = useState('');
     const { auth } = useAuth();
@@ -29,18 +30,23 @@ const Task = () => {
         // const validToken = localStorage.getItem("token");
         const fetchData = async () => {
             try {
+                // xử lý e-mail để lấy tên dịch vụ smtp
+                const getUserEmail = localStorage.getItem('email');
+                const parts = getUserEmail.split('@');
+                const domainParts = parts[1].split('.');
+
+                // fetch api
                 const response = await axios.get(`${SERVER_API}${API_ENDPOINT}/mails`, {
                     headers: {
                         Authorization: `Bearer ${auth.token}`
                     }
                 });
                 
-                //setDeadline(response.data.result);
                 setData(response.data.data);
-                //setPokemonTaskName(response.data.get_pokemon_name);
-                //setCheckDeadline(response.data.check_time);
+                setCountSent(response.data);
+                setServiceName(domainParts[0]);
 
-                // console.log("Check Deadline: " + checkDeadline.character_name)              
+                //console.log("Check count sent mail: " + countSent.the_number_of_mail_sent)              
         }
         catch (error) {
                 console.error('Error fetching data:', error);
@@ -202,6 +208,9 @@ const Task = () => {
                     ))}
             </tbody>
         </table>
+        <div>
+            {(countSent.the_number_of_mail_sent > 0) ? (<p>Trong lịch sử, bạn có <a href="/history" className="no-underline-link"> {countSent.the_number_of_mail_sent} thư đã gửi</a>, hãy kiểm tra chúng trong hộp thư đã gửi ({serviceName}).</p>) : (`Lịch sử sẽ ghi nhận thư sau khi bạn sử dụng ứng dụng.`)}
+        </div>
         <div className='text-center mt-4 mb-4'>
             {(data.length > 0) ? (
                 <button className='btn btn-primary' onClick={sendMailFunction}>Gửi toàn bộ thư ở trên</button>

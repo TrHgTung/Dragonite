@@ -9,6 +9,7 @@ import Layout from './components/Layout';
 import { AuthProvider } from './supports/AuthProvider';
 import PrivateRoute from './supports/PrivateRoute';
 import Suggest from './components/Suggest';
+import History from './components/History';
 
 function App() {
   return (
@@ -36,30 +37,15 @@ function App() {
                     </PrivateRoute>
                 } 
             />
-            {/* <Route 
-                path="/assistant-zone/:id" 
+            <Route 
+                path="/history" 
                 element={
                     <PrivateRoute>
-                        <Assistant />
+                        <History />
                     </PrivateRoute>
                 } 
-            /> */}
-            {/* <Route 
-                path="/profile" 
-                element={
-                    <PrivateRoute>
-                        <Profile />
-                    </PrivateRoute>
-                } 
-            /> */}
-            {/* <Route 
-              path="/update/:id" 
-              element={
-                <PrivateRoute>
-                  <Update />
-                </PrivateRoute>
-              } 
-            /> */}
+            />
+            
         </Routes>
         <ToastContainer 
           position="top-right"
