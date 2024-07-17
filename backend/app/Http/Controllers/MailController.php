@@ -74,7 +74,7 @@ class MailController extends Controller
             $data['attachment'] = $newFileInit;
 
             Mail::create($data);
-            
+
             return response()->json([
                 'success' => true,
                 'data' => $data,
@@ -92,8 +92,6 @@ class MailController extends Controller
     public function SendMail(Request $req){
         $userId = (string)auth()->user()->user_id;
         $getUserName = (string)auth()->user()->display_name;
-        // $getUserEmail = (string)auth()->user()->email;
-        // $getSMTP_Password = (string)auth()->user()->smtp_password;
 
         // Lay du lieu tu front-end
         $getUserEmail = (string)$req->email;
@@ -101,20 +99,23 @@ class MailController extends Controller
 
         // Xu ly du lieu de gui e-mail
         
-        $getMailsDataForSending = Mail::where('from', $getUserEmail)->where('status', 'n')->get();
+        $getMailsDataForSending = Mail::where('from', $getUserEmail)
+                                        ->where('status', 'n')
+                                        ->get();
+
         foreach ($getMailsDataForSending as $mailData) {
             $getAddressTo = $mailData->to;
-            //$getAddressCC = $mailData->cc;
-            //$getAddressBCC = $mailData->bcc;
             $getAttachment = $mailData->attachment;
             $getSubject = $mailData->subject;
             $getContent = $mailData->content;
             $mailId = $mailData->mail_id;
 
-            $getEverySingleMail = Mail::where('user_id', $userId)->where('status', 'n')->where('mail_id', $mailId)->first();
+            $getEverySingleMail = Mail::where('user_id', $userId)
+                                        ->where('status', 'n')
+                                        ->where('mail_id', $mailId)
+                                        ->first();
 
-            // $mail->CharSet = "UTF-8";
-            $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+            $mail = new PHPMailer(true);
             try {
                 $mail->CharSet = "UTF-8";
                 //Server settings
@@ -131,35 +132,31 @@ class MailController extends Controller
                 $mail->setFrom($getUserEmail, $getUserName);
                 $mail->addAddress($getAddressTo, $getAddressTo);     //Add a recipient
 
-                // if($getAddressCC){
-                //     $mail->addCC($getAddressCC);
-                    
-                // } else if($getAddressBCC){
-                //     $mail->addBCC($getAddressBCC);
-                // }
                 if($getAttachment) {
-                    $mail->addAttachment('/var/tmp/'.$getAttachment);
+                     //$mail->addAttachment('public/storage/var/tmp/'.$getAttachment);
+                    $attachmentPath = public_path('storage/var/tmp/' . $getAttachment);
+                    if (file_exists($attachmentPath)) {
+                        $mail->addAttachment($attachmentPath);
+                    } else {
+                        return response()->json([
+                            'mail_status' => 'File ko ton tai'], 404);
+                    }
                 }
 
                 //Content
                 $mail->isHTML(true);                                  //Set email format to HTML
                 $mail->Subject = $getSubject;
                 $mail->Body    = $getContent;
-                // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
             
                 $mail->send();
 
                 $data['status'] = 'y'; // yes (da gui)
 
                 $getEverySingleMail->update($data);
-                //echo 'Message has been sent';
             } catch (Exception $e) {
-               // $data['status'] = 'n'; // no (chua gui duoc)
-                // echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
                 return response()->json([
-                    'mail_status' => 'Khong the gui e-mail, hay kiem tra ket noi Internet',
-                    // 'mailer_error' => $mail->ErrorInfo,
-                ]);
+                    'mail_status' => 'Khong the gui e-mail, hay kiem tra ket noi Internet (500)',
+                ]); // loi 500 server
             }
         }
 

@@ -125,7 +125,7 @@ const Task = () => {
             const response = await axios.post(`${SERVER_API}${API_ENDPOINT}/send`, sendData,
                 {
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'multipart/form-data',
                         'Content-Type': 'application/json',
                         'Charset':'utf-8',
                         'Access-Control-Allow-Origin': '*',
