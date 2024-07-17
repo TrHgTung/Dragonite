@@ -11,7 +11,7 @@ class Suggestion extends Model
 
     protected $fillable = [
        'content',
-       'category'
+       'rating'
     ]; 
     
     public $timestamps = false;

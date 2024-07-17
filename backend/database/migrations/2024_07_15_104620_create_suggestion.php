@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('suggestion', function (Blueprint $table) {
+        Schema::create('suggestions', function (Blueprint $table) {
             $table->id();
             $table->string('content');
-            $table->string('category');
+            $table->integer('rating');
         });
     }
 

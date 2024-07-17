@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Mail;
 use App\Models\User;
+use App\Models\Suggestion;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
@@ -46,6 +47,7 @@ class MailController extends Controller
         $mailIdInit = 'MAIL_'.str_replace('-','', $updateModifiedDate).'_'.$randNum.'_'.$userId;
     
         $data = $req->all();
+        $data2 = array();
 
         $getUserName = (string)auth()->user()->display_name;
         $getUserEmail = (string)auth()->user()->email;
@@ -72,18 +74,30 @@ class MailController extends Controller
             $getFile->storeAs('var/tmp', $newFileInit, 'public');
 
             $data['attachment'] = $newFileInit;
+            
+            // save to Suggestion
+            $data2['content'] = $req->content;
+            $data2['rating'] = 0;
+
+            Suggestion::create($data2);
 
             Mail::create($data);
 
             return response()->json([
-                'success' => true,
+                'suggestion' => $data2,
                 'data' => $data,
             ], 200);
         }
 
+        // save to Suggestion
+        $data2['content'] = $req->content;
+        $data2['rating'] = 0;
+
         Mail::create($data);
+        Suggestion::create($data2);
            
         return response()->json([
+                'suggestion' => $data2,
                 'mail_data' => $data,
             ]
         );

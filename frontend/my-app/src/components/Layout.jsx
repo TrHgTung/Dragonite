@@ -61,7 +61,7 @@ const Layout = ()  => {
                 attachment: null,
                 to: ''
             });
-            toast.success('Thêm thư thành công!', {
+            toast.success('Thêm thư thành công! Hãy rải lại trang', {
               position: "top-right",
               autoClose: 5000,
               hideProgressBar: false,
@@ -77,7 +77,7 @@ const Layout = ()  => {
             //   to: ''
             // });
             
-            toast.error('Không thể thêm thư', {
+            toast.warning('Hãy tải lại trang', {
               position: "top-right",
               autoClose: 5000,
               hideProgressBar: false,
@@ -86,10 +86,10 @@ const Layout = ()  => {
               draggable: true,
               progress: undefined,
             });
-            console.error('Failed to add task:', response.data.message);
+            // console.error('Failed to add task:', response.data.message);
         }
     } catch (error) {
-        toast.error('Đã xảy ra lỗi khi thêm thư.', {
+        toast.warning('Thư (không có tệp). Hãy tải lại trang.', {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -97,7 +97,7 @@ const Layout = ()  => {
           pauseOnHover: true,
           draggable: true,
         });
-        console.error('Error adding task:', error);
+        // console.error('Error adding task:', error);
     }
   };
 

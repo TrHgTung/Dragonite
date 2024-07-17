@@ -103,13 +103,34 @@ const Suggest = () => {
         toast.warning(itemRand);
     }
 
-    const copyToClipboard = (text) => {
-        navigator.clipboard.writeText(text).then(() => {
+    const copyToClipboard = async (content, id) => {
+        navigator.clipboard.writeText(content).then(() => {
             toast.success('Đã sao chép đoạn văn bản, hãy quay lại và dán');
         }).catch((error) => {
             toast.warning('Không thể sao chép, lỗi không xác định');
             console.log('Lỗi copyToClipboard: ', error);
         });
+
+        try {
+            await axios.get(`${SERVER_API}/sanctum/csrf-cookie`, { withCredentials: true });
+            const response = await axios.patch(`${SERVER_API}${API_ENDPOINT}/upvote/${id}`, 
+                null, {
+                headers: {
+                    "Accept-Language": "en-US,en;q=0.9",
+                    'Content-Type': 'application/json',
+                    'Charset':'utf-8',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            if (response.data.success) {
+                console.log('Đã up vote');
+                window.location.reload();
+            } else {
+                console.error('có lỗi xảy ra');
+            }
+        } catch (error) {
+            console.error('Có lỗi xảy ra. lỗi: ', error);
+        }
     }
 
     return (
@@ -144,15 +165,15 @@ const Suggest = () => {
                                     {(stt <= 5) ? (
                                         <>
                                             <td><strong> {stt++}</strong> <i>(Được đề xuất cao)</i></td>
-                                            <td>{mails}</td>
-                                            <td><button className='btn btn-sm btn-secondary' onClick={() => copyToClipboard(mails)}>Sao chép</button></td>
+                                            <td>{mails.content}</td>
+                                            <td><button className='btn btn-sm btn-secondary' onClick={() => copyToClipboard(mails.content, mails.id)}>Sao chép</button></td>
                                         </>
                                     ) :
                                     (
                                         <>
                                             <td><strong> {stt++}</strong></td>
                                             <td>{mails}</td>
-                                            <td><button className='btn btn-sm btn-secondary' onClick={() => copyToClipboard(mails)}>Sao chép</button></td>
+                                            <td><button className='btn btn-sm btn-secondary' onClick={() => copyToClipboard(mails.content, mails.id)}>Sao chép</button></td>
                                         </>
                                     )}
                                </tr>
