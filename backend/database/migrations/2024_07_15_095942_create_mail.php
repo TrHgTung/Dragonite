@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('to', 128);
             $table->string('attachment', 128)->nullable();
             $table->string('subject');
-            $table->string('content')->nullable();
+            $table->longText('content')->nullable();
             $table->string('status', 4);
             $table->string('time_sent', 32);
         });

@@ -4,6 +4,8 @@ import Task from './Task';
 import host from '../config/host.json';
 import pokemon_color from '../config/pokemon-color.json';
 import { Navigate, useNavigate  } from 'react-router-dom';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 // import Logout from './Logout';
 import { useAuth } from '../supports/AuthProvider';
 import axios from 'axios';
@@ -39,11 +41,21 @@ const Layout = ()  => {
 
   const handleChange = (e) => {
     const { name, files, value } = e.target;
+    //const data = editor.getData();
     setFormData({
         ...formData,
+        //data,
         [name]: files ? files[0] : value
     });
-};
+  };
+
+  const handleEditorChange = (event, editor) => {
+    const data = editor.getData();
+    setFormData({
+      ...formData,
+      content: data
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -200,6 +212,11 @@ const Layout = ()  => {
       }
     }, []);
 
+    const editor_configuration = {
+      toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
+      height: '800px'
+    };
+
     return (
       <div className='container application-classname'>
         <div className="row">
@@ -249,13 +266,14 @@ const Layout = ()  => {
                     </div>
                     <div className="mb-3 mt-3">
                         <label htmlFor='content' className="form-label">Nội dung thư (e-mail content):</label>
-                        <input type='text' 
-                          className='form-control' 
+                        <CKEditor
+                          editor={ClassicEditor}
+                          config={editor_configuration}
+                          className='' 
                           id='content' 
                           name='content' 
-                          placeholder='Nhập nội dung...' 
-                          value={formData.content}
-                          onChange={handleChange}
+                          data={formData.content}
+                          onChange={handleEditorChange}
                         />
                         <small>Lời khuyên: <a href="/suggest" className='no-underline-link'>Lấy nội dung được gợi ý</a></small>
                     </div>

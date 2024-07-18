@@ -14,8 +14,6 @@ class Mail extends Model
         'user_id',
         'from',
         'to',
-        //'cc',
-        //'bcc',
         'attachment',
         'subject',
         'content',
