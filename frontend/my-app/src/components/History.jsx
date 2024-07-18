@@ -3,9 +3,21 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../supports/AuthProvider';
 import host from '../config/host.json';
+import pokemon_color from '../config/pokemon-color.json';
 
 const {SERVER_API} = host;
 const {API_ENDPOINT} = host;
+
+const {Venusaur} = pokemon_color;
+const {Pikachu} = pokemon_color;
+const {Charizard} = pokemon_color;
+const {Umbreon} = pokemon_color;
+const {Lapras} = pokemon_color;
+const {Dragonite} = pokemon_color;
+const {Blastoise} = pokemon_color;
+const {Dragapult} = pokemon_color;
+const {Clefable} = pokemon_color;
+const {Lucario} = pokemon_color;
 
 const Task = () => {
     const [data, setData] = useState('');
@@ -47,6 +59,41 @@ const Task = () => {
         };
 
         fetchData();
+
+        const value = localStorage.getItem('assistant');
+        if (value) {
+          switch (parseInt(value, 10)) {
+            case 1:
+              document.body.style.backgroundColor = Venusaur;
+              break;
+            case 2:
+              document.body.style.backgroundColor = Pikachu;
+              break;
+            case 3:
+              document.body.style.backgroundColor = Charizard;
+              break;
+            case 4:
+              document.body.style.backgroundColor = Umbreon;
+              break;
+            case 5:
+              document.body.style.backgroundColor = Lapras;
+              break;
+            case 6:
+              document.body.style.backgroundColor = Dragonite;
+              break;
+            case 7:
+              document.body.style.backgroundColor = Blastoise;
+              break;
+            case 8:
+              document.body.style.backgroundColor = Dragapult;
+              break;
+            case 9:
+              document.body.style.backgroundColor = Clefable;
+              break;
+            default:
+              document.body.style.backgroundColor = Lucario;
+          }
+        }
     }, [auth.token]);    
 
     

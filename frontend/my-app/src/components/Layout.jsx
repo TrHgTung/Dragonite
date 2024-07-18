@@ -2,6 +2,7 @@ import React, { Component, useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import Task from './Task';
 import host from '../config/host.json';
+import pokemon_color from '../config/pokemon-color.json';
 import { Navigate, useNavigate  } from 'react-router-dom';
 // import Logout from './Logout';
 import { useAuth } from '../supports/AuthProvider';
@@ -11,6 +12,17 @@ import { toast } from 'react-toastify';
 
 const {SERVER_API} = host;
 const {API_ENDPOINT} = host;
+
+const {Venusaur} = pokemon_color;
+const {Pikachu} = pokemon_color;
+const {Charizard} = pokemon_color;
+const {Umbreon} = pokemon_color;
+const {Lapras} = pokemon_color;
+const {Dragonite} = pokemon_color;
+const {Blastoise} = pokemon_color;
+const {Dragapult} = pokemon_color;
+const {Clefable} = pokemon_color;
+const {Lucario} = pokemon_color;
 
 const Layout = ()  => {
   const [auth, setAuth] = useState({
@@ -148,18 +160,55 @@ const Layout = ()  => {
 }
 
   const showDragonite = () => {
-    toast.success('Bạn đã tìm thấy Dragonite! Bravo');
+    toast.success('Bravo! Bạn đã tìm thấy Dragonite rồi');
   }
 
+    useEffect(() => {
+      const value = localStorage.getItem('assistant');
+      if (value) {
+        switch (parseInt(value, 10)) {
+          case 1:
+            document.body.style.backgroundColor = Venusaur;
+            break;
+          case 2:
+            document.body.style.backgroundColor = Pikachu;
+            break;
+          case 3:
+            document.body.style.backgroundColor = Charizard;
+            break;
+          case 4:
+            document.body.style.backgroundColor = Umbreon;
+            break;
+          case 5:
+            document.body.style.backgroundColor = Lapras;
+            break;
+          case 6:
+            document.body.style.backgroundColor = Dragonite;
+            break;
+          case 7:
+            document.body.style.backgroundColor = Blastoise;
+            break;
+          case 8:
+            document.body.style.backgroundColor = Dragapult;
+            break;
+          case 9:
+            document.body.style.backgroundColor = Clefable;
+            break;
+          default:
+            document.body.style.backgroundColor = Lucario;
+        }
+      }
+    }, []);
+
     return (
-      <div className='container'>
+      <div className='container application-classname'>
         <div className="row">
           <div className="col-2 col-md-2 mb-4 mt-3">
             <a href="/welcome" className='no-underline-link'>&lt; Quay lại Trang chủ</a>
           </div>
           <div className="col-md-8 col-8 text-center mb-3 mt-5">
             <h3 className='w-100 d-flex justify-content-center'>Hệ thống gửi thư đồng loạt - Dragonite</h3>
-            <small><i><strong>Người dùng:</strong> {display_name}* - <strong>Trợ lý:</strong>  
+            <small><i><strong>Người dùng:</strong> {display_name}<strong>*</strong> - <strong>Trợ lý:</strong>  
                 {assist_id_main === '1' && ' Venusaur'}
                 {assist_id_main === '2' && ' Pikachu'}
                 {assist_id_main === '3' && ' Charizard'}
@@ -175,7 +224,7 @@ const Layout = ()  => {
                 && assist_id_main !== '3'  
                 && assist_id_main !== '4'  
                 && assist_id_main !== '5') && ' Không có'} */}
-            **</i></small>
+            <strong>**</strong></i></small>
           </div>
           <div className="col-md-2 col-2">
             <div className='mt-4'>

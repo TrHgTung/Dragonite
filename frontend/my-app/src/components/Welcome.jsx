@@ -2,6 +2,19 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import { toast } from 'react-toastify';
+import pokemon_color from '../config/pokemon-color.json';
+
+
+const {Venusaur} = pokemon_color;
+const {Pikachu} = pokemon_color;
+const {Charizard} = pokemon_color;
+const {Umbreon} = pokemon_color;
+const {Lapras} = pokemon_color;
+const {Dragonite} = pokemon_color;
+const {Blastoise} = pokemon_color;
+const {Dragapult} = pokemon_color;
+const {Clefable} = pokemon_color;
+const {Lucario} = pokemon_color;
 
 const Welcome = () => {
   const navigate = useNavigate();
@@ -23,6 +36,44 @@ const Welcome = () => {
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
     setUsername(storedUsername);
+
+    const value = localStorage.getItem('assistant');
+        if (value) {
+          switch (parseInt(value, 10)) {
+            case 1:
+              document.body.style.backgroundColor = Venusaur;
+              break;
+            case 2:
+              document.body.style.backgroundColor = Pikachu;
+              break;
+            case 3:
+              document.body.style.backgroundColor = Charizard;
+              break;
+            case 4:
+              document.body.style.backgroundColor = Umbreon;
+              break;
+            case 5:
+              document.body.style.backgroundColor = Lapras;
+              break;
+            case 6:
+              document.body.style.backgroundColor = Dragonite;
+              break;
+            case 7:
+              document.body.style.backgroundColor = Blastoise;
+              break;
+            case 8:
+              document.body.style.backgroundColor = Dragapult;
+              break;
+            case 9:
+              document.body.style.backgroundColor = Clefable;
+              break;
+            case 10:
+              document.body.style.backgroundColor = Lucario;
+              break;
+            default:
+              document.body.style.backgroundColor = 'white';
+          }
+        }
   }, []);
 
   const HandleAbout = () => {
@@ -90,7 +141,7 @@ const Welcome = () => {
         </div>      
       </div>
       <div>
-        <img src='/bg/0_1.png' alt="" />
+        <img src='/bg/0.png' alt="AllPokemon" />
       </div>
       <div className='ms-4 mb-4'>
         <p>Hình ảnh: The Pokémon Company / Game Freak / Nintendo (1996)</p>

@@ -17,7 +17,7 @@ use Illuminate\Support\Collection;
 class SuggestionController extends Controller
 {
     public function GetSuggestion(){
-        $getMailContentFromHistory = Suggestion::all();
+        $getMailContentFromHistory = Suggestion::orderBy('rating', 'desc')->get();
 
         // Goi y lay noi dung mail: Chi lay nhung content co do dai, va phai loai bo nhung ten/thong tin ca nhan
         $res = array();
