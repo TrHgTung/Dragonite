@@ -222,7 +222,7 @@ const Suggest = () => {
                                     (
                                         <>
                                             <td><strong> {stt++}</strong></td>
-                                            <td>{mails}</td>
+                                            <td>{mails.content}</td>
                                             <td><button className='btn btn-sm btn-secondary' onClick={() => copyToClipboard(mails.content, mails.id)}>Sao chép</button></td>
                                         </>
                                     )}
