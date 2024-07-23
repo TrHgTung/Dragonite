@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import { toast } from 'react-toastify';
 import pokemon_color from '../config/pokemon-color.json';
@@ -34,7 +34,7 @@ const Welcome = () => {
   };
 
   useEffect(() => {
-    const storedUsername = localStorage.getItem('username');
+    const storedUsername = localStorage.getItem('token');
     setUsername(storedUsername);
 
     const value = localStorage.getItem('assistant');
@@ -121,13 +121,13 @@ const Welcome = () => {
                 
               </a>
                 <ul className="dropdown-menu show" aria-labelledby="dropdownMenuLink">
-                  <li><a href='/' className="dropdown-item btn btn-outline-success" onClick={handleNavigation}>Truy cập dữ liệu</a></li>
+                  <li><Link to='/' className="dropdown-item btn btn-outline-success" onClick={handleNavigation}>Truy cập dữ liệu</Link></li>
                   <li><a onClick={logout} className="dropdown-item force-link btn btn-outline-danger" >Đăng xuất</a></li>
                 </ul>
               </div>
               </>
           ) : (
-            <a href='/login' className="btn btn-sm btn-primary" onClick={handleNavigation}>Đăng nhập</a>
+            <Link to='/login' className="btn btn-sm btn-primary" onClick={handleNavigation}>Đăng nhập</Link>
           )}
         </div>
       </div>

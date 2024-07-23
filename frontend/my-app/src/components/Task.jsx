@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../supports/AuthProvider';
 import host from '../config/host.json';
@@ -166,7 +166,7 @@ const Task = () => {
         </table>
         <div>
             {(countSent.the_number_of_mail_sent > 0) ? (
-                <p>Trong lịch sử, bạn có <a href="/history" className="no-underline-link"> {countSent.the_number_of_mail_sent} thư đã gửi</a>, hãy kiểm tra chúng trong hộp thư đã gửi (<a href={`http://${serviceName}.com`} target='_blank'>{serviceName}</a>).</p>
+                <p>Trong lịch sử, bạn có <Link to="/history" className="no-underline-link"> {countSent.the_number_of_mail_sent} thư đã gửi</Link>, hãy kiểm tra chúng trong hộp thư đã gửi (<a href={`http://${serviceName}.com`} target='_blank'>{serviceName}</a>).</p>
             ) : (
                 <p>Lịch sử hệ thống sẽ ghi nhận thư sau khi bạn sử dụng ứng dụng. Dịch vụ đang được sử dụng: <a href={`http://${serviceName}.com`} target='_blank'>{serviceName}</a></p>
             )}

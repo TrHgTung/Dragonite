@@ -12,55 +12,55 @@ import Suggest from './components/Suggest';
 import History from './components/History';
 
 function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path='/welcome' element={<Welcome />} />
-      </Routes>
-      <AuthProvider>
-        <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route 
-                path="/" 
-                element={
-                    <PrivateRoute>
-                        <Layout />
-                    </PrivateRoute>
-                } 
-            />
-            <Route 
-                path="/suggest" 
-                element={
-                    <PrivateRoute>
-                        <Suggest />
-                    </PrivateRoute>
-                } 
-            />
-            <Route 
-                path="/history" 
-                element={
-                    <PrivateRoute>
-                        <History />
-                    </PrivateRoute>
-                } 
-            />
-            
-        </Routes>
-        <ToastContainer 
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-        </AuthProvider>
-    </Router>
-  );
+    return (
+        <Router>
+            <Routes>
+                <Route path='/welcome' element={<Welcome />} />
+            </Routes>
+            <AuthProvider>
+                <Routes>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route
+                        path="/"
+                        element={
+                            <PrivateRoute>
+                                <Layout />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/suggest"
+                        element={
+                            <PrivateRoute>
+                                <Suggest />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/history"
+                        element={
+                            <PrivateRoute>
+                                <History />
+                            </PrivateRoute>
+                        }
+                    />
+
+                </Routes>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                />
+            </AuthProvider>
+        </Router>
+    );
 }
 
 export default App;

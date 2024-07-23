@@ -86,7 +86,7 @@ const Login = () => {
         
         <div className='container'>
             <div className='mt-4'>
-                <a href="/welcome" className='no-underline-link'>&lt; Quay lại Trang chủ</a>
+                <Link to="/welcome" className='no-underline-link'>&lt; Quay lại Trang chủ</Link>
             </div>
             <form onSubmit={handleLogin} autoComplete='off'>
                 <div className="row">

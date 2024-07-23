@@ -1,7 +1,7 @@
 <h1>Dragonite - Một ứng dụng gửi thư điện tử đồng loạt với Laravel và ReactJS</h1>
 <h2>GIỚI THIỆU</h2>
 
-<h6>Phiên bản: 1.0</h6>
+<h6>Phiên bản: 1.1</h6>
 <p>Một hệ thống nhằm lưu trữ nhiều nội dung thư điện tử theo danh sách và cho phép gửi đi đồng loạt </p>
 
 - Tác quyền: <br>
@@ -17,6 +17,14 @@
 
 - Chủ thể: Người dùng <br>
 - Kiến trúc phần mềm: Kiến trúc phân tán (Distributed Architecture) <br>
+
+<h4>❗Ver. 1.1:</h5>
+
+- Sửa lỗi kiểm tra phiên của người dùng
+- Thay đổi cách hiển thị dữ liệu trong Đề xuất
+- Thay đổi thẻ a thành thẻ Link (component của React Router) để thể hiện tính chất ứng dụng đơn trang (Single Page App.)
+
+<br>
 
 <h2>CÁC CÔNG NGHỆ NỔI BẬT</h2>
 1. <b> Laravel </b>: <br>
@@ -126,7 +134,7 @@
 "mail_id": "MAIL_20240717_6466_USER_441120240717",
 "user_id": "USER_441120240717",
 "from": "tung****@gmail.com",
-"to": "nguyentuanh****m@gmail.com",
+"to": "nguyentuanh****@gmail.com",
 "attachment": "FILE8185_New Text Document.txt",
 "subject": "V\/v G\u1eedi t\u1edbi Khoa loz",
 "content": "H\u00ecnh nh\u01b0 trong l\u00f2ng anh \u0111\u00e3 kh\u00f4ng c\u00f2n h\u00ecnh b\u00f3ng ai ngo\u00e0i em \u0111\u00e2u (\u0110\u00e2u) \/ H\u1eb1==n\u1eb1m================",
@@ -217,7 +225,7 @@
 1. Chạy lệnh `npm start`<br>
 2. Truy cập trong trình duyệt: http://127.0.0.1:3000<br><br>
 
-> http://127.0.0.1 chính là địa chỉ http://localhost<br>
+> <i>Fact</i>: http://127.0.0.1 chính là địa chỉ http://localhost<br>
 
 <h2>CÁC LỖI PHÁT SINH</h2>
 

@@ -63,7 +63,7 @@ const Register = () => {
   return (
     <div className="container">
         <div className='mt-4'>
-            <a href="/login" className='no-underline-link'>&lt; Quay lại Đăng nhập</a>
+            <Link to="/login" className='no-underline-link'>&lt; Quay lại Đăng nhập</Link>
         </div>
             <form onSubmit={handleRegister}>
                 <div className="row">
@@ -143,7 +143,7 @@ const Register = () => {
                         </div>
                     </div>
                     <div>
-                        <p className='p-0.25'>*: Truy cập <a href="https://myaccount.google.com/apppasswords">https://myaccount.google.com/apppasswords</a> và làm theo hướng dẫn của <i>Google </i>để lấy mật khẩu ứng dụng (cho mục đích gửi e-mail bằng phương thức SMTP)</p>
+                        <p className='p-0.25'>*: Truy cập <Link to="https://myaccount.google.com/apppasswords">https://myaccount.google.com/apppasswords</Link> và làm theo hướng dẫn của <i>Google </i>để lấy mật khẩu ứng dụng (cho mục đích gửi e-mail bằng phương thức SMTP)</p>
                         
                         <p><b>Tác quyền & Hình ảnh: </b> <i> The Pokémon Company, GameFreak, Nintendo</i></p>
                         <p><strong>Mã nguồn</strong>: <i>Hoàng Tùng</i></p>

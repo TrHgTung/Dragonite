@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Task from './Task';
 import host from '../config/host.json';
 import pokemon_color from '../config/pokemon-color.json';
-import { Navigate, useNavigate  } from 'react-router-dom';
+import { Link, Navigate, useNavigate  } from 'react-router-dom';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 // import Logout from './Logout';
@@ -221,7 +221,7 @@ const Layout = ()  => {
       <div className='container application-classname'>
         <div className="row">
           <div className="col-2 col-md-2 mb-4 mt-3">
-            <a href="/welcome" className='no-underline-link'>&lt; Quay lại Trang chủ</a>
+            <Link to="/welcome" className='no-underline-link'>&lt; Quay lại Trang chủ</Link>
           </div>
           <div className="col-md-8 col-8 text-center mb-3 mt-5">
             <h3 className='w-100 d-flex justify-content-center'>Hệ thống gửi thư đồng loạt - Dragonite</h3>
@@ -275,7 +275,7 @@ const Layout = ()  => {
                           data={formData.content}
                           onChange={handleEditorChange}
                         />
-                        <small>Lời khuyên: <a href="/suggest" className='no-underline-link'>Lấy nội dung được gợi ý</a></small>
+                        <small>Lời khuyên: <Link to="/suggest" className='no-underline-link'>Lấy nội dung được gợi ý</Link></small>
                     </div>
                     <div className="mb-3 mt-3">
                         <label htmlFor='attachment' className="form-label">Tệp đính kèm (file attachment):</label>

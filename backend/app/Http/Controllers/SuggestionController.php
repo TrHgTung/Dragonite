@@ -34,13 +34,7 @@ class SuggestionController extends Controller
 
         //$result = array();
         $result = array_unique($res, SORT_REGULAR);   // Xoa cac content trung lap
-        
-        // for($i=0; $i < $getMailContentFromHistory->count(); $i++){
-        //     if(strlen($getMailContentFromHistory[$i]) > 15){
-        //         $result[] = $getMailContentFromHistory[$i];
-        //     }
-        // }
-
+       
         $processedArray = array_map(function ($sentence) {
             $words = explode(' ', $sentence['content']);
             $filteredWords = array();
@@ -57,8 +51,20 @@ class SuggestionController extends Controller
             return $sentence;
         }, $result);
 
+        foreach($processedArray as $data3){
+            if(strlen($data3['content']) > 15){
+                $finalResult[] = [
+                    'id' => $data3['id'],
+                    //
+                    // chỉ láy ra tối đa 250 ký tự trong content; còn mb_convert_encoding dùng để fix lôix "Malformed UTF-8 characters, possibly incorrectly encoded"
+                    'content' => mb_convert_encoding(substr($data3['content'], 0, 250),'UTF-8', 'UTF-8'),
+                    'rating' => $data3['rating']
+                ];
+            }
+        }
+
         return response()->json([
-            'data' => $processedArray,
+            'data' => $finalResult,
         ]);
     }
 

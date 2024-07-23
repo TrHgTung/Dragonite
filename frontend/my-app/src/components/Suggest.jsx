@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../supports/AuthProvider';
 import host from '../config/host.json';
@@ -127,7 +127,7 @@ const Suggest = () => {
         return (
         <div className='container mt-4'>
            <div className='mb-4'>
-                <a href="/" className='no-underline-link'>&lt; Quay lại danh sách</a>
+                <Link to="/" className='no-underline-link'>&lt; Quay lại danh sách</Link>
             </div>
             <div className='text-center'>
                 <h5>Các gợi ý cho nội dung e-mail:  </h5>
@@ -186,7 +186,7 @@ const Suggest = () => {
     return (
       <div className='container mt-4'>
         <div className='mb-4'>
-            <a href="/" className='no-underline-link'>&lt; Quay lại danh sách</a>
+            <Link to="/" className='no-underline-link'>&lt; Quay lại danh sách</Link>
         </div>
         <div className='text-center'>
             <h5>Các gợi ý cho nội dung e-mail:  </h5>

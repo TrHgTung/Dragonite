@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../supports/AuthProvider';
 import host from '../config/host.json';
@@ -101,7 +101,7 @@ const Task = () => {
         return (
         <div className='container mt-4'>
            <div className='mb-4'>
-                <a href="/" className='no-underline-link'>&lt; Quay lại danh sách chính</a>
+                <Link to="/" className='no-underline-link'>&lt; Quay lại danh sách chính</Link>
             </div>
             <div className='text-center'>
                 <h5>Lịch sử e-mail đã hoàn tất:  </h5>
@@ -121,7 +121,7 @@ const Task = () => {
     return (
       <div className='container mt-4'>
         <div className='mb-4'>
-                <a href="/" className='no-underline-link'>&lt; Quay lại danh sách chính</a>
+                <Link to="/" className='no-underline-link'>&lt; Quay lại danh sách chính</Link>
             </div>
             <div className='text-center'>
                 <h5>Lịch sử e-mail đã hoàn tất:  </h5>
