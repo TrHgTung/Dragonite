@@ -82,11 +82,7 @@ const Welcome = () => {
   }
 
   const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user_id');
-    localStorage.removeItem('email');
-    localStorage.removeItem('SMTP_password');
-    localStorage.removeItem('assistant');
+    localStorage.clear();
     setAuth({ 
         token: null,
         isAuthenticated: false 

@@ -9,8 +9,8 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState({
-        token : localStorage.getItem('token') || null,
-        isAuthenticated : !!localStorage.getItem('token')
+        token: localStorage.getItem('token') || null,
+        isAuthenticated: !!localStorage.getItem('token')
     });
     const [loading, setLoading] = useState(true);
 
@@ -19,40 +19,40 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            setAuth({ 
-                token: token, 
-                isAuthenticated: true 
+            setAuth({
+                token: token,
+                isAuthenticated: true
             });
-        } 
+        }
         setLoading(false);
     }, []);
 
     useEffect(() => {
-        if(!loading && !auth.isAuthenticated){
-        // navigate('/login');
+        if (!loading && !auth.isAuthenticated) {
+            // navigate('/login');
         }
     }, [loading, auth.isAuthenticated, navigate]);
 
 
     const login = (token) => {
         localStorage.setItem('token', token);
-        setAuth({ 
-            token: token, 
-            isAuthenticated: true 
+        setAuth({
+            token: token,
+            isAuthenticated: true
         });
         navigate('/');
     };
 
     const logout = () => {
-        localStorage.removeItem('token');
-        setAuth({ 
+        localStorage.clear();
+        setAuth({
             token: null,
-            isAuthenticated: false 
+            isAuthenticated: false
         });
         navigate('/login');
     };
 
-    if(loading) {
+    if (loading) {
         return (
             <div>
                 <p>Đang tải nội dung...</p>

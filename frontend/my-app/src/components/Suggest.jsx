@@ -23,9 +23,17 @@ const {Lucario} = pokemon_color;
 
 const Suggest = () => {
     const [data, setData] = useState('');
-    const [currentPage, setcurrentPage] = useState('');
-    const [numberOfPage, setnumberOfPage] = useState('');
+    const [paginatedData, setpaginatedData] = useState('');
+    // const [numberOfPage, setnumberOfPage] = useState('');
+    const [dataItem, setDataItem] = useState('');
+    const [PageIndex, setPageIndex] = useState('');
+    const [ItemNumber, setNumberofItem] = useState('');
+    const [newData, setNewData] = useState([]);
     const [pokemon, setPokemon] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [perPage, setPerPage] = useState(10);
+    const [lastPage, setLastPage] = useState(1);
+
     const { auth } = useAuth();
     const navigate = useNavigate();
     let stt = 1;  
@@ -100,10 +108,10 @@ const Suggest = () => {
               document.body.style.backgroundColor = Lucario;
           }
         }
-
-        const fetchData = async () => {
+        var the_current_page = 0;
+        const fetchData = async (item) => {
             try {
-                const response = await axios.get(`${SERVER_API}${API_ENDPOINT}/suggest`, {
+                const response = await axios.get(`${SERVER_API}${API_ENDPOINT}/suggest?page=${item}`, {
                     headers: {
                         Authorization: `Bearer ${auth.token}`,
                         "Accept-Language": "en-US,en;q=0.9",
@@ -112,17 +120,18 @@ const Suggest = () => {
                     }
                 });
                 
-                //setDeadline(response.data.result);
+                the_current_page = localStorage.getItem('pg');
                 setData(response.data.data);
-                setcurrentPage(response.data.paginated_data.current_page);
-                setnumberOfPage(response.data.paginated_data.last_page);        
+                setpaginatedData(response.data.paginated_data);
+                setCurrentPage(response.data.current_page);
+                setLastPage(response.data.last_page);
         }
         catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
-
-        fetchData();
+        // fetchData();
+        fetchData(the_current_page);
     }, [auth.token]);    
     
     
@@ -183,7 +192,52 @@ const Suggest = () => {
     }
 
     // console.log('currentPage = ' + currentPage)
-    //             console.log('numberOfPage = ' + numberOfPage)
+    // console.log('numberOfPage = ' + numberOfPage)
+
+    const handlePagination = async (item) => {
+        try{
+          const takeData = await axios.get(`${SERVER_API}${API_ENDPOINT}/suggest?page=${item}`,{
+            headers: { 
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'Content-Type' : 'application/json'
+            }
+          });
+          setNumberofItem(takeData.data.the_number_of_mail_sent);
+          setPageIndex(item);
+        }
+        catch (error) {
+          console.log(error);
+          return;
+        }
+        
+        try{
+          const response = await axios.get(`${SERVER_API}${API_ENDPOINT}/suggest?page=${item}`, 
+          // {
+            // ItemNumber,
+            // PageIndex: item
+          // },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'Content-Type': 'application/json',
+            }
+          }, {
+            withCredentials: true 
+          });
+  
+          // setDataItem(Math.floor(response.data.the_number_of_mail_sent / 5));
+          setNewData(response.data.sent_mails_by_pageIndex);
+  
+          // test
+        //   console.log('ItemNumber = ' + ItemNumber);
+        //   console.log('PageIndex = ' + item); 
+        //   console.log('Data item = ' + dataItem);  // failed
+        }
+        catch (err) {
+          console.log(err);
+        }
+        //setCurrentPage(item);
+    };
 
     return (
       <div className='container mt-4'>
@@ -206,26 +260,26 @@ const Suggest = () => {
                 </tr>
             </thead>
             <tbody>
-                {(data.length === 0) ? (
+                {(paginatedData.data.length === 0) ? (
                     <tr>
                         <td colSpan="7" className="text-center">Không có thư khả dụng</td>
                     </tr>
                 ) : (
-                        data.map((mails) => (
+                    paginatedData.data.map((data2) => (
                             (
-                               <tr key={mails.id}>
+                               <tr key={data2.id}>
                                     {(stt <= 5) ? (
                                         <>
                                             <td><strong> {stt++}</strong> <i>(Được đề xuất cao)</i></td>
-                                            <td>{mails.content}</td>
-                                            <td><button className='btn btn-sm btn-secondary' onClick={() => copyToClipboard(mails.content, mails.id)}>Sao chép</button></td>
+                                            <td>{data2.content}</td>
+                                            <td><button className='btn btn-sm btn-secondary' onClick={() => copyToClipboard(data2.content, data2.id)}>Sao chép</button></td>
                                         </>
                                     ) :
                                     (
                                         <>
                                             <td><strong> {stt++}</strong></td>
-                                            <td>{mails.content}</td>
-                                            <td><button className='btn btn-sm btn-secondary' onClick={() => copyToClipboard(mails.content, mails.id)}>Sao chép</button></td>
+                                            <td>{data2.content}</td>
+                                            <td><button className='btn btn-sm btn-secondary' onClick={() => copyToClipboard(data2.content, data2.id)}>Sao chép</button></td>
                                         </>
                                     )}
                                </tr>
@@ -234,13 +288,54 @@ const Suggest = () => {
                     ))}
             </tbody>
         </table>
-        <div>
-            {/* {users.map(user => (
-                <li key={user.id}>{user.name}</li>
-            ))} */}
-            {(numberOfPage)}
-            {(currentPage)}
+        {/* <div>
+            {(paginatedData.length === 0) ? (
+                <></>
+            ) : (
+                <>
+                    {
+                        (paginatedData.last_page === 1) ? (
+                            <a href="#">{paginatedData.current_page}</a>
+                        ) : (paginatedData.last_page === 2) ? (
+                            <>
+                                
+                                <a href="#">{paginatedData.current_page}</a>
+                                <a href="#">{paginatedData.last_page}</a>
+                            </>
+                        ) : (
+                            <>
+                                <a href="#">{paginatedData.from}</a>
+                                <a href="#">{paginatedData.current_page}</a>
+                                <a href="#">{paginatedData.last_page}</a>
+                            </>
+                        )
+                    }
+                </>
+            )}
+        </div> */}
+        <div className='text-center'>
+            {(() => {
+                const arrayIndex = [];
+
+                for(let item = 1; item <= paginatedData.last_page; item++){
+                  arrayIndex.push(<button key={item} onClick={() => handlePagination(item)} className='btn btn btn-secondary ms-3'>{item}</button>);
+                }
+
+                return arrayIndex;
+              })()}
         </div>
+        {/* <div className='text-center'>
+                {Array.from({ length: lastPage }, (_, index) => (
+                    <button
+                        className='btn btn btn-secondary ms-3' 
+                        key={index + 1} 
+                        onClick={() => handlePagination(index++)}
+                        disabled={index++ === currentPage}
+                    >
+                        {index + 1}
+                    </button>
+                ))}
+            </div> */}
         <div>
             {/* <p>{pokemon}</p> */}
             {/* <img src="/pokemon/" alt="" src={`/assets/assistant_zone/${pokemonName[index].character_name}_${isShiny[index].is_shiny}.png`} width="360px" height="360px" alt={`${pokemonName[index].character_name}`}/> */}

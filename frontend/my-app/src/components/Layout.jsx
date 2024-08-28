@@ -149,11 +149,7 @@ const Layout = ()  => {
   const navigate = useNavigate();
  
   const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user_id');
-    localStorage.removeItem('email');
-    localStorage.removeItem('SMTP_password');
-    localStorage.removeItem('assistant');
+    localStorage.clear();
     // localStorage.removeItem('pokemon_name');
     setAuth({ 
         token: null,

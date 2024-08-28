@@ -41,6 +41,7 @@ const Task = () => {
                 setData(response.data.data);
                 setCountSent(response.data);
                 setServiceName(domainParts[0]);
+                localStorage.setItem('pg', 1);
 
                 //console.log("Check count sent mail: " + countSent.the_number_of_mail_sent)              
         }
