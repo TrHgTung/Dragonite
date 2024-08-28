@@ -120,7 +120,7 @@ const Suggest = () => {
                     }
                 });
                 
-                the_current_page = localStorage.getItem('pg');
+                the_current_page = item;
                 setData(response.data.data);
                 setpaginatedData(response.data.paginated_data);
                 setCurrentPage(response.data.current_page);
@@ -130,8 +130,7 @@ const Suggest = () => {
                 console.error('Error fetching data:', error);
             }
         };
-        // fetchData();
-        fetchData(the_current_page);
+        fetchData(currentPage);
     }, [auth.token]);    
     
     
@@ -191,9 +190,6 @@ const Suggest = () => {
         }
     }
 
-    // console.log('currentPage = ' + currentPage)
-    // console.log('numberOfPage = ' + numberOfPage)
-
     const handlePagination = async (item) => {
         try{
           const takeData = await axios.get(`${SERVER_API}${API_ENDPOINT}/suggest?page=${item}`,{
@@ -212,10 +208,6 @@ const Suggest = () => {
         
         try{
           const response = await axios.get(`${SERVER_API}${API_ENDPOINT}/suggest?page=${item}`, 
-          // {
-            // ItemNumber,
-            // PageIndex: item
-          // },
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -225,18 +217,12 @@ const Suggest = () => {
             withCredentials: true 
           });
   
-          // setDataItem(Math.floor(response.data.the_number_of_mail_sent / 5));
           setNewData(response.data.sent_mails_by_pageIndex);
   
-          // test
-        //   console.log('ItemNumber = ' + ItemNumber);
-        //   console.log('PageIndex = ' + item); 
-        //   console.log('Data item = ' + dataItem);  // failed
         }
         catch (err) {
           console.log(err);
         }
-        //setCurrentPage(item);
     };
 
     return (
@@ -288,31 +274,6 @@ const Suggest = () => {
                     ))}
             </tbody>
         </table>
-        {/* <div>
-            {(paginatedData.length === 0) ? (
-                <></>
-            ) : (
-                <>
-                    {
-                        (paginatedData.last_page === 1) ? (
-                            <a href="#">{paginatedData.current_page}</a>
-                        ) : (paginatedData.last_page === 2) ? (
-                            <>
-                                
-                                <a href="#">{paginatedData.current_page}</a>
-                                <a href="#">{paginatedData.last_page}</a>
-                            </>
-                        ) : (
-                            <>
-                                <a href="#">{paginatedData.from}</a>
-                                <a href="#">{paginatedData.current_page}</a>
-                                <a href="#">{paginatedData.last_page}</a>
-                            </>
-                        )
-                    }
-                </>
-            )}
-        </div> */}
         <div className='text-center'>
             {(() => {
                 const arrayIndex = [];
@@ -324,21 +285,7 @@ const Suggest = () => {
                 return arrayIndex;
               })()}
         </div>
-        {/* <div className='text-center'>
-                {Array.from({ length: lastPage }, (_, index) => (
-                    <button
-                        className='btn btn btn-secondary ms-3' 
-                        key={index + 1} 
-                        onClick={() => handlePagination(index++)}
-                        disabled={index++ === currentPage}
-                    >
-                        {index + 1}
-                    </button>
-                ))}
-            </div> */}
         <div>
-            {/* <p>{pokemon}</p> */}
-            {/* <img src="/pokemon/" alt="" src={`/assets/assistant_zone/${pokemonName[index].character_name}_${isShiny[index].is_shiny}.png`} width="360px" height="360px" alt={`${pokemonName[index].character_name}`}/> */}
             <img src={`/pokemon/${pokemon}.png`}  alt={`${pokemon}`} title={`Xin chào, ${pokemon} hi vọng bạn tìm được thứ mình cần`} onClick={sayMessage} />
         </div>
       </div>
