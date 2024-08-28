@@ -75,16 +75,46 @@ class MailController extends Controller
 
             $data['attachment'] = $newFileInit;
             
-            // save to Suggestion
-            $data2['content'] = $req->content;
-            $data2['rating'] = 0;
+            // SAVE TO Suggestion
+            // $data2['content'] = $req->content;
+            // $data2['rating'] = 0;
 
-            Suggestion::create($data2);
+            $data2 = array();
+            // foreach($data2 as $dta2){
+                if(strlen($req->content) > 15){
+                    $data2[] = [
+                        'content' => $req->content,
+                        'rating' => 0
+                    ];
+                }
+            // }
+    
+            $result = array_unique($data2['content'], SORT_REGULAR);   // Xoa cac content trung lap
+           
+            $processedArray = array_map(function ($sentence) {
+                $words = explode(' ', $sentence['content']);
+                $filteredWords = array();
+        
+                foreach ($words as $index => $word) {
+                    if ($index == 0 || !ctype_upper($word[0])) {  // Xoa cac tu viet hoa (ten rieng), nhung giu nguyen nhung tu dau cau
+                        $filteredWords[] = $word;
+                    }
+                }
+    
+                $sentence['content'] = implode(' ', $filteredWords);
+        
+                // return implode(' ', $filteredWords);
+                return $sentence;
+            }, $result);
+                
+            // Suggestion::create($data2);
+            Suggestion::create($finalResult);
 
             Mail::create($data);
 
             return response()->json([
-                'suggestion' => $data2,
+                // 'suggestion' => $data2,
+                'suggestion' => $result,
                 'data' => $data,
             ], 200);
         }

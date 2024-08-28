@@ -23,6 +23,8 @@ const {Lucario} = pokemon_color;
 
 const Suggest = () => {
     const [data, setData] = useState('');
+    const [currentPage, setcurrentPage] = useState('');
+    const [numberOfPage, setnumberOfPage] = useState('');
     const [pokemon, setPokemon] = useState('');
     const { auth } = useAuth();
     const navigate = useNavigate();
@@ -112,8 +114,8 @@ const Suggest = () => {
                 
                 //setDeadline(response.data.result);
                 setData(response.data.data);
-
-                // console.log("Check Deadline: " + checkDeadline.character_name)              
+                setcurrentPage(response.data.paginated_data.current_page);
+                setnumberOfPage(response.data.paginated_data.last_page);        
         }
         catch (error) {
                 console.error('Error fetching data:', error);
@@ -122,6 +124,7 @@ const Suggest = () => {
 
         fetchData();
     }, [auth.token]);    
+    
     
     if (!data) {
         return (
@@ -179,9 +182,8 @@ const Suggest = () => {
         }
     }
 
-    // useEffect(() => {
-        
-    //   }, []);
+    // console.log('currentPage = ' + currentPage)
+    //             console.log('numberOfPage = ' + numberOfPage)
 
     return (
       <div className='container mt-4'>
@@ -194,7 +196,7 @@ const Suggest = () => {
                 <i>Hãy sao chép một trong những gợi ý nội dung e-mail phía dưới. Chúng có thể giúp bạn hoàn thiện e-mail tốt hơn</i>
             </div>
         </div>
-        {/* làm tới đây rồi */}
+        
         <table className="table table-striped">
             <thead>
                 <tr>
@@ -232,6 +234,13 @@ const Suggest = () => {
                     ))}
             </tbody>
         </table>
+        <div>
+            {/* {users.map(user => (
+                <li key={user.id}>{user.name}</li>
+            ))} */}
+            {(numberOfPage)}
+            {(currentPage)}
+        </div>
         <div>
             {/* <p>{pokemon}</p> */}
             {/* <img src="/pokemon/" alt="" src={`/assets/assistant_zone/${pokemonName[index].character_name}_${isShiny[index].is_shiny}.png`} width="360px" height="360px" alt={`${pokemonName[index].character_name}`}/> */}

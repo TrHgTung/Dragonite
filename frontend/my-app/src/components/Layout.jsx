@@ -252,6 +252,8 @@ const Layout = ()  => {
         <div className="row">
             <div className="col-md-4">
                 <h5>Thêm nội dung thư của bạn</h5>
+                <small><i>Note: Tệp đính kèm (file attachment) là trường không bắt buộc và có giới hạn về kích cỡ tệp được tải lên, tùy vào loại tài khoản của bạn</i></small><br /><br />
+                <small><i>Nếu bạn cố gắng vượt qua các giới hạn về số lượng ký tự được nhập vào các trường bằng cách chỉnh sửa các thuộc tính thông qua công cụ Kiểm tra phần tử (DevTools), thì nội dung được lưu cuối cùng vẫn sẽ bị giới hạn số lượng ký tự!</i></small><br />
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3 mt-3">
                         <label htmlFor='content' className="form-label">Tiêu đề thư (e-mail subject):</label>
@@ -259,7 +261,8 @@ const Layout = ()  => {
                           className='form-control' 
                           id='subject' 
                           name='subject' 
-                          placeholder='Nhập tiêu đề ...' 
+                          placeholder='Nhập tiêu đề (tối đa 100 ký tự - hỗ trợ tiếng Việt) ...' 
+                          maxlength="100"
                           value={formData.subject}
                           onChange={handleChange}
                         />
@@ -293,7 +296,8 @@ const Layout = ()  => {
                           className='form-control' 
                           id='to' 
                           name='to' 
-                          placeholder='Nhập Địa chỉ gửi...' 
+                          placeholder='Nhập Địa chỉ gửi (tối đa 100 ký tự) ...' 
+                          maxlength="50"
                           value={formData.to}
                           onChange={handleChange}
                         />
