@@ -18,7 +18,7 @@ class SuggestionController extends Controller
 {
     public function GetSuggestion(){
         $getMailContentFromHistory = Suggestion::orderBy('rating', 'desc')->get();
-        $getPaginatedData = Suggestion::orderBy('rating', 'desc')->paginate(3);
+        $getPaginatedData = Suggestion::orderBy('rating', 'desc')->paginate(5);
 
         return response()->json([
             'paginated_data' => $getPaginatedData,

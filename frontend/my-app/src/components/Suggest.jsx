@@ -112,6 +112,7 @@ const Suggest = () => {
                     'Content-Type': 'application/json'
                 }
             });
+            
             setData(response.data.paginated_data.data);
             setLastPage(response.data.paginated_data.last_page);
         } catch (error) {
@@ -193,11 +194,25 @@ const Suggest = () => {
                     ) : (
                         data.map((item, index) => (
                             <tr key={item.id}>
-                                <td>{stt++}</td>
-                                <td>{item.content}</td>
-                                <td>
-                                    <button className='btn btn-sm btn-secondary' onClick={() => copyToClipboard(item.content, item.id)}>Sao chép</button>
-                                </td>
+                                {(stt == 1) ? (
+                                    <>
+                                        <td>{stt++} <i>(Được đề xuất)</i></td>
+                                        <td>{item.content}</td>
+                                        <td>
+                                            <button className='btn btn-sm btn-secondary' onClick={() => copyToClipboard(item.content, item.id)}>Sao chép</button>
+                                        </td>
+                                    </>
+                                ) : (
+                                    <>
+                                        <td>{stt++}</td>
+                                        <td>{item.content}</td>
+                                        <td>
+                                            <button className='btn btn-sm btn-secondary' onClick={() => copyToClipboard(item.content, item.id)}>Sao chép</button>
+                                        </td>
+                                    </>
+                                
+                                
+                                )}
                             </tr>
                         ))
                     )}

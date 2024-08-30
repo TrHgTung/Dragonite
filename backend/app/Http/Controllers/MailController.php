@@ -24,12 +24,12 @@ class MailController extends Controller
             $getSMTP_Password = (string)auth()->user()->smtp_password;
 
             $getMailsByUsrId = Mail::where('user_id', $userId)->where('status', 'n')->get();
-            $getSentMail = Mail::where('user_id', $userId)->where('status', 'y')->get();
+            //$getSentMail = Mail::where('user_id', $userId)->where('status', 'y')->get();
             $getNumberOfSentMail = Mail::where('user_id', $userId)->where('status', 'y')->get()->count();
 
             return response([
                 'data' => $getMailsByUsrId,
-                'all_mails_sent' => $getSentMail,
+                // 'all_mails_sent' => $getSentMail,
                 'the_number_of_mail_sent' => $getNumberOfSentMail,
             ], 200);
         // } 
@@ -38,6 +38,17 @@ class MailController extends Controller
         //         'error' => 'Ban chua dang nhap hoac du lieu bi chan',
         //     ], 401);
         // }
+    }
+
+    public function MailHistory(){
+        $userId = (string)auth()->user()->user_id; 
+        $mailSent = Mail::where('user_id', $userId)->where('status', 'y')->paginate(5);
+        $getNumberOfMailSent = $mailSent->count();
+
+        return response([
+            'data' => $mailSent,
+            'count' => $getNumberOfMailSent,
+        ], 200);
     }
 
     public function SaveMail(Request $req){

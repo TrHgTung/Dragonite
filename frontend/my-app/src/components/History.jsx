@@ -22,6 +22,9 @@ const {Lucario} = pokemon_color;
 const Task = () => {
     const [data, setData] = useState('');
     const [serviceName, setServiceName] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [perPage] = useState(10);
+    const [lastPage, setLastPage] = useState(1);
     const { auth } = useAuth();
     const navigate = useNavigate();
     let stt = 1;
@@ -36,30 +39,6 @@ const Task = () => {
 
     useEffect(() => {
         // const validToken = localStorage.getItem("token");
-        const fetchData = async () => {
-            try {
-                const getUserEmail = localStorage.getItem('email');
-                // xử lý e-mail để lấy tên dịch vụ smtp
-                const parts = getUserEmail.split('@');
-                const domainParts = parts[1].split('.');
-
-                //fetch api
-                const response = await axios.get(`${SERVER_API}${API_ENDPOINT}/mails`, {
-                    headers: {
-                        Authorization: `Bearer ${auth.token}`
-                    }
-                });
-                
-                setServiceName(domainParts[0]);
-                setData(response.data.all_mails_sent);
-        }
-        catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
-        fetchData();
-
         const value = localStorage.getItem('assistant');
         if (value) {
           switch (parseInt(value, 10)) {
@@ -94,9 +73,37 @@ const Task = () => {
               document.body.style.backgroundColor = Lucario;
           }
         }
-    }, [auth.token]);    
+        
+        fetchData(currentPage);
+    }, [auth.token, currentPage]);
 
-    
+    const fetchData = async (page) => {
+        try {
+            const getUserEmail = localStorage.getItem('email');
+            // xử lý e-mail để lấy tên dịch vụ smtp
+            const parts = getUserEmail.split('@');
+            const domainParts = parts[1].split('.');
+
+            //fetch api
+            const response = await axios.get(`${SERVER_API}${API_ENDPOINT}/history?page=${page}`, {
+                headers: {
+                    Authorization: `Bearer ${auth.token}`
+                }
+            });
+            
+            setServiceName(domainParts[0]);
+            setData(response.data.data.data);
+            setLastPage(response.data.data.last_page);
+      }
+      catch (error) {
+              console.error('Error fetching data:', error);
+          }
+      };
+
+    const handlePagination = (page) => {
+      setCurrentPage(page);
+    };
+
     if (data === null || !data) {
         return (
         <div className='container mt-4'>
@@ -117,7 +124,7 @@ const Task = () => {
     }
 
   
-   
+  //  Co du lieu de hien thi
     return (
       <div className='container mt-4'>
         <div className='mb-4'>
@@ -141,7 +148,7 @@ const Task = () => {
                     <th scope="col">Đã gửi đến địa chỉ</th>
                 </tr>
             </thead>
-            <tbody>
+            {/* <tbody>
                 {(data.length === 0) ? (
                     <tr>
                         <td colSpan="7" className="text-center">Không có thư khả dụng</td>
@@ -160,8 +167,37 @@ const Task = () => {
                             )
                         )
                     ))}
-            </tbody>
+            </tbody> */}
+            <tbody>
+                    {data.length === 0 ? (
+                        <tr>
+                            <td colSpan="7" className="text-center">Không có thư khả dụng</td>
+                        </tr>
+                    ) : (
+                        data.map((mails) => (
+                            <tr key={mails.id}>
+                                {(
+                                    <>
+                                      <td>{stt++}</td>
+                                      <td>{mails.subject}</td>
+                                      <td>{mails.content}</td>
+                                      <td>{mails.attachment == null && <p>Không có</p>}
+                                          {mails.attachment != '' && mails.attachment}</td>
+                                      <td>{mails.to}</td>
+                                    </>
+                                )}
+                            </tr>
+                        ))
+                    )}
+                </tbody>
         </table>
+        <div className='text-center'>
+                {[...Array(lastPage)].map((_, index) => (
+                    <button key={index + 1} onClick={() => handlePagination(index + 1)} className='btn btn-secondary ms-3'>
+                        {index + 1}
+                    </button>
+                ))}
+            </div>
       </div>
     )
   }

@@ -41,5 +41,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/profile', [AuthController::class, 'Profile']);
     Route::patch('/finish/mail/{id}', [MailController::class, 'Remove']);
     Route::patch('/upvote/{id}', [SuggestionController::class, 'CheckPoint']);
+    Route::get('/history', [MailController::class, 'MailHistory']); 
 });
 Route::get('/suggest', [SuggestionController::class, 'GetSuggestion']);
