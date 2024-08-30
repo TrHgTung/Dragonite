@@ -47,7 +47,7 @@ class MailController extends Controller
         $mailIdInit = 'MAIL_'.str_replace('-','', $updateModifiedDate).'_'.$randNum.'_'.$userId;
     
         $data = $req->all();
-        $data2 = array();
+        $data2 = [];
 
         $getUserName = (string)auth()->user()->display_name;
         $getUserEmail = (string)auth()->user()->email;
@@ -63,7 +63,6 @@ class MailController extends Controller
 
         if($req->hasFile('attachment')){
             $getFileName = $getFile->getClientOriginalName();
-            // $realFileName = current(explode('.',$getFileName));
             $realFileName = pathinfo($getFileName, PATHINFO_FILENAME);
             $getFileExtension = $getFile->getClientOriginalExtension();
 
@@ -76,23 +75,21 @@ class MailController extends Controller
             $data['attachment'] = $newFileInit;
             
             // SAVE TO Suggestion
-            // $data2['content'] = $req->content;
-            // $data2['rating'] = 0;
-
-            $data2 = array();
-            // foreach($data2 as $dta2){
-                if(strlen($req->content) > 15){
-                    $data2[] = [
-                        'content' => $req->content,
-                        'rating' => 0
-                    ];
-                }
-            // }
+            
+            if(strlen($req->content > 15)){
+                $data2[] = [
+                    'content' => $req->content,
+                    'rating' => 0
+                ];
+            }
     
-            $result = array_unique($data2['content'], SORT_REGULAR);   // Xoa cac content trung lap
+            // $result = array();
+            // $result[] = array_unique($data2['content'], SORT_REGULAR);   // Xoa cac content trung lap
+            $result = array_unique(array_column($data2, 'content'), SORT_REGULAR);
+            // $result[] = array_unique($req->content, SORT_REGULAR);   // Xoa cac content trung lap
            
             $processedArray = array_map(function ($sentence) {
-                $words = explode(' ', $sentence['content']);
+                $words = explode(' ', $sentence);
                 $filteredWords = array();
         
                 foreach ($words as $index => $word) {
@@ -101,30 +98,39 @@ class MailController extends Controller
                     }
                 }
     
-                $sentence['content'] = implode(' ', $filteredWords);
+                // $sentence['content'] = implode(' ', $filteredWords);
         
-                // return implode(' ', $filteredWords);
-                return $sentence;
+                return implode(' ', $filteredWords);
+                // return $sentence;
             }, $result);
                 
+            if (!empty($processedArray)) {
+                foreach ($processedArray as $content) {
+                    Suggestion::create([
+                        'content' => $content, 
+                        'rating' => 0
+                    ]);
+                }
+            }
             // Suggestion::create($data2);
-            Suggestion::create($finalResult);
-
+        
             Mail::create($data);
 
             return response()->json([
-                // 'suggestion' => $data2,
+                // 'test_var' => $data2,
                 'suggestion' => $result,
                 'data' => $data,
             ], 200);
         }
 
-        // save to Suggestion
-        $data2['content'] = $req->content;
-        $data2['rating'] = 0;
-
+        // save to Suggestion (neu ko co file attachemt)
+        if (!empty($req->content)) {
+            $data2['content'] = $req->content;
+            $data2['rating'] = 0;
+            Suggestion::create($data2);
+        }
+    
         Mail::create($data);
-        Suggestion::create($data2);
            
         return response()->json([
                 'suggestion' => $data2,

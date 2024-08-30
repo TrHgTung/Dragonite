@@ -1,5 +1,5 @@
-import React, { Component, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../supports/AuthProvider';
 import host from '../config/host.json';
@@ -7,8 +7,7 @@ import quote from '../config/quote.json';
 import pokemon_color from '../config/pokemon-color.json';
 import { toast } from 'react-toastify';
 
-const {SERVER_API} = host;
-const {API_ENDPOINT} = host;
+const { SERVER_API, API_ENDPOINT } = host;
 
 const {Venusaur} = pokemon_color;
 const {Pikachu} = pokemon_color;
@@ -22,25 +21,17 @@ const {Clefable} = pokemon_color;
 const {Lucario} = pokemon_color;
 
 const Suggest = () => {
-    const [data, setData] = useState('');
-    const [paginatedData, setpaginatedData] = useState('');
-    // const [numberOfPage, setnumberOfPage] = useState('');
-    const [dataItem, setDataItem] = useState('');
-    const [PageIndex, setPageIndex] = useState('');
-    const [ItemNumber, setNumberofItem] = useState('');
-    const [newData, setNewData] = useState([]);
+    const [data, setData] = useState(null);
     const [pokemon, setPokemon] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [perPage, setPerPage] = useState(10);
+    const [perPage] = useState(10);
     const [lastPage, setLastPage] = useState(1);
-
     const { auth } = useAuth();
-    const navigate = useNavigate();
-    let stt = 1;  
-
     const getAssistant = localStorage.getItem('assistant');
+    let stt = 1;
 
-    useEffect(() => {      
+    useEffect(() => {
+        // Set background color based on Pokemon selection
         switch(getAssistant){
             case '1':
                 setPokemon('Venusaur');
@@ -108,189 +99,124 @@ const Suggest = () => {
               document.body.style.backgroundColor = Lucario;
           }
         }
-        var the_current_page = 0;
-        const fetchData = async (item) => {
-            try {
-                const response = await axios.get(`${SERVER_API}${API_ENDPOINT}/suggest?page=${item}`, {
-                    headers: {
-                        Authorization: `Bearer ${auth.token}`,
-                        "Accept-Language": "en-US,en;q=0.9",
-                        'Content-Type': 'application/json',
-                        'Charset':'utf-8',
-                    }
-                });
-                
-                the_current_page = item;
-                setData(response.data.data);
-                setpaginatedData(response.data.paginated_data);
-                setCurrentPage(response.data.current_page);
-                setLastPage(response.data.last_page);
-        }
-        catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
+
+        // Fetch data for the current page
         fetchData(currentPage);
-    }, [auth.token]);    
-    
-    
+    }, [auth.token, currentPage]);
+
+    const fetchData = async (page) => {
+        try {
+            const response = await axios.get(`${SERVER_API}${API_ENDPOINT}/suggest?page=${page}`, {
+                headers: {
+                    Authorization: `Bearer ${auth.token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            setData(response.data.data);
+            setLastPage(response.data.last_page);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    const handlePagination = (page) => {
+        setCurrentPage(page);
+    };
+
+    const sayMessage = () => {
+        const itemRand = quote[Math.floor(Math.random() * quote.length)];
+        toast.warning(itemRand);
+    };
+
+    const copyToClipboard = async (content, id) => {
+        try {
+            await navigator.clipboard.writeText(content);
+            toast.success('Đã sao chép đoạn văn bản, hãy quay lại và dán');
+
+            await axios.patch(`${SERVER_API}${API_ENDPOINT}/upvote/${id}`, null, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            window.location.reload();
+        } catch (error) {
+            toast.warning('Không thể sao chép, lỗi không xác định');
+            console.error('Lỗi copyToClipboard:', error);
+        }
+    };
+
     if (!data) {
         return (
+            <div className='container mt-4'>
+                <div className='mb-4'>
+                    <Link to="/" className='no-underline-link'>&lt; Quay lại danh sách</Link>
+                </div>
+                <div className='text-center'>
+                    <h5>Các gợi ý cho nội dung e-mail:</h5>
+                    <div className='mb-4'>
+                        <i>Hãy sao chép một trong những gợi ý nội dung e-mail phía dưới. Chúng có thể giúp bạn hoàn thiện e-mail tốt hơn</i>
+                    </div>
+                </div>
+                <div className='mt-4 mb-4'>
+                    <p> Đang tải dữ liệu...</p>
+                </div>
+            </div>
+        );
+    }
+
+    return (
         <div className='container mt-4'>
-           <div className='mb-4'>
+            <div className='mb-4'>
                 <Link to="/" className='no-underline-link'>&lt; Quay lại danh sách</Link>
             </div>
             <div className='text-center'>
-                <h5>Các gợi ý cho nội dung e-mail:  </h5>
+                <h5>Các gợi ý cho nội dung e-mail:</h5>
                 <div className='mb-4'>
                     <i>Hãy sao chép một trong những gợi ý nội dung e-mail phía dưới. Chúng có thể giúp bạn hoàn thiện e-mail tốt hơn</i>
                 </div>
             </div>
-           <div className='mt-4 mb-4'>
-                <p> Đang tải dữ liệu...</p>
-           </div>
-        </div>
-        );
-    }
 
-    const sayMessage = () => {
-        const randQuote = quote;
-        var itemRand = randQuote[Math.floor(Math.random()*randQuote.length)];
+            <table className="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Index</th>
+                        <th scope="col">Nội dung được gợi ý</th>
+                        <th scope="col">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {data.length === 0 ? (
+                        <tr>
+                            <td colSpan="3" className="text-center">Không có thư khả dụng</td>
+                        </tr>
+                    ) : (
+                        data.map((item, index) => (
+                            <tr key={item.id}>
+                                <td>{stt++}</td>
+                                <td>{item.content}</td>
+                                <td>
+                                    <button className='btn btn-sm btn-secondary' onClick={() => copyToClipboard(item.content, item.id)}>Sao chép</button>
+                                </td>
+                            </tr>
+                        ))
+                    )}
+                </tbody>
+            </table>
 
-        toast.warning(itemRand);
-    }
+            <div className='text-center'>
+                {[...Array(lastPage)].map((_, index) => (
+                    <button key={index + 1} onClick={() => handlePagination(index + 1)} className='btn btn-secondary ms-3'>
+                        {index + 1}
+                    </button>
+                ))}
+            </div>
 
-    const copyToClipboard = async (content, id) => {
-        navigator.clipboard.writeText(content).then(() => {
-            toast.success('Đã sao chép đoạn văn bản, hãy quay lại và dán');
-        }).catch((error) => {
-            toast.warning('Không thể sao chép, lỗi không xác định');
-            console.log('Lỗi copyToClipboard: ', error);
-        });
-
-        try {
-            await axios.get(`${SERVER_API}/sanctum/csrf-cookie`, { withCredentials: true });
-            const response = await axios.patch(`${SERVER_API}${API_ENDPOINT}/upvote/${id}`, 
-                null, {
-                headers: {
-                    "Accept-Language": "en-US,en;q=0.9",
-                    'Content-Type': 'application/json',
-                    'Charset':'utf-8',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            });
-            if (response.data.success) {
-                console.log('Đã up vote');
-                window.location.reload();
-            } else {
-                console.error('có lỗi xảy ra');
-            }
-        } catch (error) {
-            console.error('Có lỗi xảy ra. lỗi: ', error);
-        }
-    }
-
-    const handlePagination = async (item) => {
-        try{
-          const takeData = await axios.get(`${SERVER_API}${API_ENDPOINT}/suggest?page=${item}`,{
-            headers: { 
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-              'Content-Type' : 'application/json'
-            }
-          });
-          setNumberofItem(takeData.data.the_number_of_mail_sent);
-          setPageIndex(item);
-        }
-        catch (error) {
-          console.log(error);
-          return;
-        }
-        
-        try{
-          const response = await axios.get(`${SERVER_API}${API_ENDPOINT}/suggest?page=${item}`, 
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-              'Content-Type': 'application/json',
-            }
-          }, {
-            withCredentials: true 
-          });
-  
-          setNewData(response.data.sent_mails_by_pageIndex);
-  
-        }
-        catch (err) {
-          console.log(err);
-        }
-    };
-
-    return (
-      <div className='container mt-4'>
-        <div className='mb-4'>
-            <Link to="/" className='no-underline-link'>&lt; Quay lại danh sách</Link>
-        </div>
-        <div className='text-center'>
-            <h5>Các gợi ý cho nội dung e-mail:  </h5>
-            <div className='mb-4'>
-                <i>Hãy sao chép một trong những gợi ý nội dung e-mail phía dưới. Chúng có thể giúp bạn hoàn thiện e-mail tốt hơn</i>
+            <div>
+                <img src={`/pokemon/${pokemon}.png`} alt={pokemon} title={`Xin chào, ${pokemon} hi vọng bạn tìm được thứ mình cần`} onClick={sayMessage} />
             </div>
         </div>
-        
-        <table className="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">Index</th>
-                    <th scope="col">Nội dung được gợi ý</th>
-                    <th scope="col">Hành động</th>
-                </tr>
-            </thead>
-            <tbody>
-                {(paginatedData.data.length === 0) ? (
-                    <tr>
-                        <td colSpan="7" className="text-center">Không có thư khả dụng</td>
-                    </tr>
-                ) : (
-                    paginatedData.data.map((data2) => (
-                            (
-                               <tr key={data2.id}>
-                                    {(stt <= 5) ? (
-                                        <>
-                                            <td><strong> {stt++}</strong> <i>(Được đề xuất cao)</i></td>
-                                            <td>{data2.content}</td>
-                                            <td><button className='btn btn-sm btn-secondary' onClick={() => copyToClipboard(data2.content, data2.id)}>Sao chép</button></td>
-                                        </>
-                                    ) :
-                                    (
-                                        <>
-                                            <td><strong> {stt++}</strong></td>
-                                            <td>{data2.content}</td>
-                                            <td><button className='btn btn-sm btn-secondary' onClick={() => copyToClipboard(data2.content, data2.id)}>Sao chép</button></td>
-                                        </>
-                                    )}
-                               </tr>
-                            )
-                        )
-                    ))}
-            </tbody>
-        </table>
-        <div className='text-center'>
-            {(() => {
-                const arrayIndex = [];
-
-                for(let item = 1; item <= paginatedData.last_page; item++){
-                  arrayIndex.push(<button key={item} onClick={() => handlePagination(item)} className='btn btn btn-secondary ms-3'>{item}</button>);
-                }
-
-                return arrayIndex;
-              })()}
-        </div>
-        <div>
-            <img src={`/pokemon/${pokemon}.png`}  alt={`${pokemon}`} title={`Xin chào, ${pokemon} hi vọng bạn tìm được thứ mình cần`} onClick={sayMessage} />
-        </div>
-      </div>
-    )
-  }
-
+    );
+}
 
 export default Suggest;
