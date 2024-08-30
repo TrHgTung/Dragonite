@@ -1,7 +1,7 @@
 <h1>Dragonite - Một ứng dụng gửi thư điện tử đồng loạt với Laravel và ReactJS</h1>
 <h2>GIỚI THIỆU</h2>
 
-<h6>Phiên bản: 1.1</h6>
+<h6>Phiên bản: 1.2</h6>
 <p>Một hệ thống nhằm lưu trữ nhiều nội dung thư điện tử theo danh sách và cho phép gửi đi đồng loạt </p>
 
 - Tác quyền: <br>
@@ -22,7 +22,12 @@
 
 - Sửa lỗi kiểm tra phiên của người dùng
 - Thay đổi cách hiển thị dữ liệu trong Đề xuất
-- Thay đổi thẻ a thành thẻ Link (component của React Router) để thể hiện tính chất ứng dụng đơn trang (Single Page App.)
+- Thay đổi thẻ a thành thẻ Link (component của React Router) để thể hiện tính chất ứng dụng đơn trang (Single Page App.)<br>
+
+<h4>❗Ver. 1.2:</h5>
+
+- Sửa lỗi khi thêm mới nội dung thư
+- Thực hiện phân trang cho các trang: Đề xuất nội dung & Lịch sử mail
 
 <br>
 
@@ -150,32 +155,187 @@
 
 {"mail_status":"Gui e-mail thanh cong (200)"}
 
-<h4>6. Response xem lịch sử:</h4>
+<h4>6. Response xem lịch sử và phân trang:</h4>
 
 {
-"data": [],
-"all_mails_sent": [
+"data": {
+"current_page": 2,
+"data": [
 {
-"id": 39,
-"mail_id": "MAIL_20240717_6466_USER_441120240717",
-"user_id": "USER_441120240717",
+"id": 75,
+"mail_id": "MAIL_20240830_3042_USER_614520240720",
+"user_id": "USER_614520240720",
 "from": "tung****@gmail.com",
-"to": "nguyentua*****@gmail.com",
-"attachment": "FILE8185_New Text Document.txt",
-"subject": "V\/v G\u1eedi t\u1edbi Khoa loz",
-"content": "H\u00ecnh nh\u01b0 trong l\u00f2ng anh \u0111\u00e3 kh\u00f4ng c\u00f2n h\u00ecnh b\u00f3ng ai ngo\u00e0i em \u0111\u00e2u (\u0110\u00e2u) \/ H\u1eb1==n\u1eb1m================",
+"to": "nguyen********@gmail.com",
+"attachment": null,
+"subject": "30Aug2024_2",
+"content": "<p>tytytytyty<\/p>",
 "status": "y",
-"time_sent": "2024-07-17"
+"time_sent": "2024-08-30"
 }
 ],
-"the_number_of_mail_sent": 1
+"first_page_url": "http:\/\/127.0.0.1:4401\/api\/history?page=1",
+"from": 6,
+"last_page": 2,
+"last_page_url": "http:\/\/127.0.0.1:4401\/api\/history?page=2",
+"links": [
+{
+"url": "http:\/\/127.0.0.1:4401\/api\/history?page=1",
+"label": "&laquo; Previous",
+"active": false
+},
+{
+"url": "http:\/\/127.0.0.1:4401\/api\/history?page=1",
+"label": "1",
+"active": false
+},
+{
+"url": "http:\/\/127.0.0.1:4401\/api\/history?page=2",
+"label": "2",
+"active": true
+},
+{
+"url": null,
+"label": "Next &raquo;",
+"active": false
+}
+],
+"next_page_url": null,
+"path": "http:\/\/127.0.0.1:4401\/api\/history",
+"per_page": 5,
+"prev_page_url": "http:\/\/127.0.0.1:4401\/api\/history?page=1",
+"to": 6,
+"total": 6
+},
+"count": 1
 }
 
-<h4>7. Response xem đề xuất:</h4>
+<h4>7. Response xem đề xuất và phân trang:</h4>
 
 {
+"paginated_data": {
+"current_page": 1,
 "data": [
-"H\u00ecnh nh\u01b0 trong l\u00f2ng anh \u0111\u00e3 kh\u00f4ng c\u00f2n h\u00ecnh b\u00f3ng ai ngo\u00e0i em \u0111\u00e2u (\u0110\u00e2u) \/"
+{
+"id": 23,
+"content": "<p>Thien ly oi!<\/p>",
+"rating": 13
+},
+{
+"id": 22,
+"content": "<p>Dung lam trai tim anh dau<\/p>",
+"rating": 8
+},
+{
+"id": 21,
+"content": "<p>Hello world<\/p>",
+"rating": 6
+},
+{
+"id": 19,
+"content": "<p>Hello world<\/p>",
+"rating": 2
+},
+{
+"id": 20,
+"content": "<p>Hello world<\/p>",
+"rating": 1
+}
+],
+"first_page_url": "http:\/\/127.0.0.1:4401\/api\/suggest?page=1",
+"from": 1,
+"last_page": 3,
+"last_page_url": "http:\/\/127.0.0.1:4401\/api\/suggest?page=3",
+"links": [
+{
+"url": null,
+"label": "&laquo; Previous",
+"active": false
+},
+{
+"url": "http:\/\/127.0.0.1:4401\/api\/suggest?page=1",
+"label": "1",
+"active": true
+},
+{
+"url": "http:\/\/127.0.0.1:4401\/api\/suggest?page=2",
+"label": "2",
+"active": false
+},
+{
+"url": "http:\/\/127.0.0.1:4401\/api\/suggest?page=3",
+"label": "3",
+"active": false
+},
+{
+"url": "http:\/\/127.0.0.1:4401\/api\/suggest?page=2",
+"label": "Next &raquo;",
+"active": false
+}
+],
+"next_page_url": "http:\/\/127.0.0.1:4401\/api\/suggest?page=2",
+"path": "http:\/\/127.0.0.1:4401\/api\/suggest",
+"per_page": 5,
+"prev_page_url": null,
+"to": 5,
+"total": 11
+},
+"data": [
+{
+"id": 23,
+"content": "<p>Thien ly oi!<\/p>",
+"rating": 13
+},
+{
+"id": 22,
+"content": "<p>Dung lam trai tim anh dau<\/p>",
+"rating": 8
+},
+{
+"id": 21,
+"content": "<p>Hello world<\/p>",
+"rating": 6
+},
+{
+"id": 19,
+"content": "<p>Hello world<\/p>",
+"rating": 2
+},
+{
+"id": 20,
+"content": "<p>Hello world<\/p>",
+"rating": 1
+},
+{
+"id": 24,
+"content": "<p>fdfdfdfdfdf fdfdfdf<\/p>",
+"rating": 1
+},
+{
+"id": 25,
+"content": "<p>trtrtrtrtrtrtrttr<\/p>",
+"rating": 0
+},
+{
+"id": 26,
+"content": "<p>frdgrtgrtg<\/p>",
+"rating": 0
+},
+{
+"id": 27,
+"content": "<p>dsdsdsdsdsdsd<\/p>",
+"rating": 0
+},
+{
+"id": 28,
+"content": "<p>Day la noi dung cua ngay 30 thang 8 \/ 2024<\/p>",
+"rating": 0
+},
+{
+"id": 29,
+"content": "<p>tytytytyty<\/p>",
+"rating": 0
+}
 ]
 }
 
