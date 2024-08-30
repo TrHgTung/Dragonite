@@ -112,8 +112,8 @@ const Suggest = () => {
                     'Content-Type': 'application/json'
                 }
             });
-            setData(response.data.data);
-            setLastPage(response.data.last_page);
+            setData(response.data.paginated_data.data);
+            setLastPage(response.data.paginated_data.last_page);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
