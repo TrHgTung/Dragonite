@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: dragonite
+    ports:
+      - "4401:4401"
+    volumes:
+      - ./backend:/var/www
+    depends_on:
+      - mysql
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=dragonite
+      - DB_USERNAME=root
+      - DB_PASSWORD=pokemon
+
+  frontend:
+    build:
+      context: ./frontend/my-app
+    container_name: my-app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/my-app:/app
+    stdin_open: true
+    tty: true
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: dragonite
+      MYSQL_ROOT_PASSWORD: pokemon
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
