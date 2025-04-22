@@ -137,7 +137,7 @@ const Welcome = () => {
         </div>      
       </div>
       <div>
-        <img src='/bg/0.png' alt="AllPokemon" />
+        <img src='/bg/0.PNG' />
       </div>
       <div className='ms-4 mb-4'>
         <p>Hình ảnh: The Pokémon Company / Game Freak / Nintendo (1996)</p>

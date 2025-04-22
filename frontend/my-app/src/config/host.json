@@ -1,4 +1,4 @@
 {
-    "SERVER_API": "http://127.0.0.1:4401",
+    "SERVER_API": "http://192.168.1.10:4401",
     "API_ENDPOINT": "/api"
 }

@@ -68,7 +68,7 @@ const Register = () => {
             <form onSubmit={handleRegister}>
                 <div className="row">
                     <div className="col-md-6 mt-5">
-                        <img src="/bg/0.png"  alt=''/>
+                        <img src="/bg/0.PNG"  alt=''/>
                     </div>
                     <div className="col-md-6">
                         <h2 className='w-100 d-flex justify-content-center p-3 mt-3'>Đăng ký sử dụng</h2>

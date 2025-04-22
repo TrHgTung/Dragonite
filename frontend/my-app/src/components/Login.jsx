@@ -91,7 +91,7 @@ const Login = () => {
             <form onSubmit={handleLogin} autoComplete='off'>
                 <div className="row">
                     <div className="col-md-6">
-                        <img src="/bg/0.png" alt="review-pokemon" />
+                        <img src="/bg/0.PNG" alt="review-pokemon" />
                     </div>
                     <div className="col-md-6">
                     <h2 className='w-100 d-flex justify-content-center p-3'>Yêu cầu xác thực người dùng</h2>
